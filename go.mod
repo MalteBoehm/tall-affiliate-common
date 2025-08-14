@@ -1,4 +1,4 @@
-module github.com/MalteBoehm/tall-affiliate-commonll-affiliate-common
+module github.com/MalteBoehm/tall-affiliate-common
 
 go 1.24.2
 
