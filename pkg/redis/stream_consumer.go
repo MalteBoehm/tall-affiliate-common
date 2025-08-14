@@ -7,9 +7,9 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/events"
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/interfaces"
 	"github.com/redis/go-redis/v9"
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/events"
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/interfaces"
 )
 
 // StreamConsumer implements Redis stream consumption with consumer groups

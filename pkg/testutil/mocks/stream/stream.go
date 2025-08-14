@@ -6,8 +6,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/events"
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/interfaces"
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/events"
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/interfaces"
 	"github.com/stretchr/testify/mock"
 )
 

@@ -5,8 +5,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/events"
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/interfaces"
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/events"
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/interfaces"
 )
 
 // ServiceEventAdapter provides a unified adapter for all services
@@ -49,7 +49,7 @@ func (s *ServiceEventAdapter) PublishProductEvent(ctx context.Context, eventType
 	if err != nil {
 		return err
 	}
-	
+
 	// Determine target stream based on event type
 	streamName := DetermineTargetStream(eventType)
 	return s.PublishEvent(ctx, streamName, event)
@@ -61,7 +61,7 @@ func (s *ServiceEventAdapter) PublishContentEvent(ctx context.Context, eventType
 	if err != nil {
 		return err
 	}
-	
+
 	streamName := DetermineTargetStream(eventType)
 	return s.PublishEvent(ctx, streamName, event)
 }
@@ -72,7 +72,7 @@ func (s *ServiceEventAdapter) PublishBrowseNodeEvent(ctx context.Context, eventT
 	if err != nil {
 		return err
 	}
-	
+
 	streamName := DetermineTargetStream(eventType)
 	return s.PublishEvent(ctx, streamName, event)
 }
@@ -106,7 +106,7 @@ func isProductLifecycleEvent(eventType string) bool {
 		events.EventTypeProductStatusChanged,
 		events.EventTypeProductIgnored,
 	}
-	
+
 	for _, pe := range productEvents {
 		if pe == eventType {
 			return true
@@ -126,7 +126,7 @@ func isContentGenerationEvent(eventType string) bool {
 		events.EventTypeReviewsFetchFailed,
 		events.EventTypeReviewsProcessed,
 	}
-	
+
 	for _, ce := range contentEvents {
 		if ce == eventType {
 			return true
@@ -142,7 +142,7 @@ func isBrowseNodeEvent(eventType string) bool {
 		events.EventTypeBrowseNodeFailed,
 		events.EventTypeBrowseNodeDetectionFailed,
 	}
-	
+
 	for _, bne := range browseNodeEvents {
 		if bne == eventType {
 			return true
@@ -157,7 +157,7 @@ func isPriceTrackingEvent(eventType string) bool {
 		events.EventTypePriceUpdated,
 		events.EventTypePriceUpdateFailed,
 	}
-	
+
 	for _, pe := range priceEvents {
 		if pe == eventType {
 			return true

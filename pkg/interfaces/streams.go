@@ -5,7 +5,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/events"
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/events"
 )
 
 // EventHandler defines the function signature for handling events

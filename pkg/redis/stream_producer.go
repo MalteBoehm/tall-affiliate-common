@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"log/slog"
 
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/events"
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/interfaces"
 	"github.com/redis/go-redis/v9"
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/events"
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/interfaces"
 )
 
 // StreamProducer implements Redis stream event publishing

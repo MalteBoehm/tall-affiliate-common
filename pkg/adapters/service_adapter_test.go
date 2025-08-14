@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/events"
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/events"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

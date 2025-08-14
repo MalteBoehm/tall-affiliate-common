@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/MalteBoehm/tall-affiliate-common/pkg/events"
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/maltedev/tall-affiliate/tall-affiliate-common/pkg/events"
 )
 
 func TestStreamConsumer_CreateConsumerGroup(t *testing.T) {
