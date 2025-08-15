@@ -118,6 +118,7 @@ func TestEventTypes(t *testing.T) {
 		EventTypeProductStatusChanged,
 		EventTypeProductUpdateRequested,
 		EventTypeProductIgnored,
+		EventTypeProductReviewRequired,
 
 		// Content Generation Events
 		EventTypeContentGenerationRequested,
@@ -130,16 +131,53 @@ func TestEventTypes(t *testing.T) {
 		EventTypeContentAnalysisFailed,
 
 		// Reviews Events
+		EventTypeReviewsRequested,
+		EventTypeReviewsFetched,
+		EventTypeReviewsStored,
 		EventTypeReviewsCollected,
 		EventTypeReviewsFetchFailed,
 		EventTypeReviewsProcessed,
+		EventTypeReviewsValidated,
+		EventTypeReviewsEnriched,
+		EventTypeReviewsCached,
+		EventTypeReviewsExpired,
+		EventTypeReviewsError,
+		EventTypeReviewsDeleted,
 
 		// Browse Node Events
+		EventTypeBrowseNodeRequested,
+		EventTypeBrowseNodeResolved,
+		EventTypeBrowseNodeFailed,
+		EventTypeBrowseNodeDetectionFailed,
 
 		// Price Tracking Events
 		EventTypeCheckPrice,
 		EventTypePriceUpdated,
 		EventTypePriceUpdateFailed,
+
+		// Orchestration Events
+		DimensionEnrichmentRequested,
+		DimensionEnrichmentCompleted,
+		DimensionEnrichmentFailed,
+		QualityAssessmentRequested,
+		QualityAssessmentCompleted,
+		QualityAssessmentFailed,
+		PriceMonitoringScheduled,
+		AvailabilityCheckScheduled,
+		PeriodicUpdateScheduled,
+
+		// PA-API Enrichment Events
+		ColorEnrichmentRequested,
+		ColorEnrichmentCompleted,
+		ColorEnrichmentFailed,
+		VariationEnrichmentRequested,
+		VariationEnrichmentCompleted,
+		VariationEnrichmentFailed,
+
+		// PA-API Enrichment Events (CloudEvent format)
+		ProductEnrichmentRequestedV1,
+		ProductEnrichmentCompletedV1,
+		ProductEnrichmentFailedV1,
 	}
 
 	// Ensure all event types are non-empty strings

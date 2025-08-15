@@ -3,6 +3,7 @@ package events
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -85,6 +86,11 @@ const (
 	VariationEnrichmentRequested = "VARIATION_ENRICHMENT_REQUESTED"
 	VariationEnrichmentCompleted = "VARIATION_ENRICHMENT_COMPLETED"
 	VariationEnrichmentFailed    = "VARIATION_ENRICHMENT_FAILED"
+
+	// PA-API Enrichment Event Types (CloudEvent format)
+	ProductEnrichmentRequestedV1 = "product.enrichment.requested.v1"
+	ProductEnrichmentCompletedV1 = "product.enrichment.completed.v1"
+	ProductEnrichmentFailedV1    = "product.enrichment.failed.v1"
 )
 
 // Event represents a domain event
@@ -351,6 +357,62 @@ type VariationEnrichmentFailedPayload struct {
 	ProductID string    `json:"product_id"`
 	Reason    string    `json:"reason"`
 	FailedAt  time.Time `json:"failed_at"`
+}
+
+// ColorVariant represents a product color variation
+type ColorVariant struct {
+	ColorName string     `json:"color_name"`
+	ASIN      string     `json:"asin"`
+	Images    []ImageSet `json:"images"`
+}
+
+// ImageSet represents product images at different sizes
+type ImageSet struct {
+	Small  string `json:"small"`
+	Medium string `json:"medium"`
+	Large  string `json:"large"`
+}
+
+// ProductEnrichmentRequestedData represents a PA-API enrichment request
+type ProductEnrichmentRequestedData struct {
+	ASIN       string `json:"asin"`
+	Region     string `json:"region"`
+	RequestID  string `json:"request_id"`
+	RetryCount int    `json:"retry_count"`
+}
+
+func (p *ProductEnrichmentRequestedData) Validate() error {
+	if p.ASIN == "" {
+		return fmt.Errorf("ASIN is required")
+	}
+	if p.Region == "" {
+		return fmt.Errorf("region is required")
+	}
+	if p.RequestID == "" {
+		return fmt.Errorf("request_id is required")
+	}
+	return nil
+}
+
+// ProductEnrichedData represents successful PA-API enrichment
+type ProductEnrichedData struct {
+	ASIN          string         `json:"asin"`
+	Region        string         `json:"region"`
+	RequestID     string         `json:"request_id"`
+	ColorVariants []ColorVariant `json:"color_variants"`
+	ProcessingMS  int64          `json:"processing_ms"`
+	EnrichedAt    time.Time      `json:"enriched_at"`
+}
+
+// ProductEnrichmentFailedData represents failed PA-API enrichment
+type ProductEnrichmentFailedData struct {
+	ASIN         string    `json:"asin"`
+	Region       string    `json:"region"`
+	RequestID    string    `json:"request_id"`
+	ErrorCode    string    `json:"error_code"`
+	ErrorMessage string    `json:"error_message"`
+	FailedAt     time.Time `json:"failed_at"`
+	RetryCount   int       `json:"retry_count"`
 }
 
 // PriceMonitoringScheduledPayload represents the payload for scheduled price monitoring
@@ -681,4 +743,22 @@ func NewProductIgnoredEvent(asin, reason string) *Event {
 
 	event, _ := NewEvent("PRODUCT_IGNORED", "product", asin, payload)
 	return event
+}
+
+// NewProductEnrichmentRequestedEvent creates a new PA-API enrichment request event
+func NewProductEnrichmentRequestedEvent(source string, data *ProductEnrichmentRequestedData) (*Event, error) {
+	if err := data.Validate(); err != nil {
+		return nil, err
+	}
+	return NewEvent(ProductEnrichmentRequestedV1, "product", data.ASIN, data)
+}
+
+// NewProductEnrichedEvent creates a new PA-API enrichment success event
+func NewProductEnrichedEvent(source string, data *ProductEnrichedData) (*Event, error) {
+	return NewEvent(ProductEnrichmentCompletedV1, "product", data.ASIN, data)
+}
+
+// NewProductEnrichmentFailedEvent creates a new PA-API enrichment failure event
+func NewProductEnrichmentFailedEvent(source string, data *ProductEnrichmentFailedData) (*Event, error) {
+	return NewEvent(ProductEnrichmentFailedV1, "product", data.ASIN, data)
 }
