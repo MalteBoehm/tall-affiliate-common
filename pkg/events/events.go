@@ -9,83 +9,125 @@ import (
 	"github.com/google/uuid"
 )
 
-// Event types (UPPERCASE gemäß event.md)
+// Event types with numbered convention (Phase_Option_Name)
+// Numbers indicate sequence, Letters indicate path (A=Success, B=Failure, C=Manual, D=Retry)
 const (
-	// Product Lifecycle Events
-	EventTypeNewProductDetected         = "NEW_PRODUCT_DETECTED"
-	EventTypeProductValidated           = "PRODUCT_VALIDATED"
-	EventTypeProductUnavailable         = "PRODUCT_UNAVAILABLE"
-	EventTypeProductDeleted             = "PRODUCT_DELETED"
-	EventTypeProductCreated             = "PRODUCT_CREATED"
-	EventTypeProductUpdated             = "PRODUCT_UPDATED"
-	EventTypeProductAvailabilityChanged = "PRODUCT_AVAILABILITY_CHANGED"
-	EventTypeProductStatusChanged       = "PRODUCT_STATUS_CHANGED"
-	EventTypeProductUpdateRequested     = "PRODUCT_UPDATE_REQUESTED"
+	// Phase 1: Product Discovery (01-02)
+	Event_01_ProductDetected        = "01_PRODUCT_DETECTED"
+	Event_02A_ProductValidated      = "02A_PRODUCT_VALIDATED"
+	Event_02B_ProductIgnored        = "02B_PRODUCT_IGNORED"
+	Event_02C_ProductReviewRequired = "02C_PRODUCT_REVIEW_REQUIRED"
 
-	// Content Generation Events
-	EventTypeContentGenerationRequested = "CONTENT_GENERATION_REQUESTED"
-	EventTypeContentGenerationStarted   = "CONTENT_GENERATION_STARTED"
-	EventTypeContentGenerated           = "CONTENT_GENERATED"
-	EventTypeContentGenerationFailed    = "CONTENT_GENERATION_FAILED"
+	// Phase 2: Enrichment Orchestration (03-05)
+	Event_03_EnrichmentOrchestrationStarted = "03_ENRICHMENT_ORCHESTRATION_STARTED"
+	Event_04A_DimensionEnrichmentRequested  = "04A_DIMENSION_ENRICHMENT_REQUESTED"
+	Event_04B_ColorEnrichmentRequested      = "04B_COLOR_ENRICHMENT_REQUESTED"
+	Event_04C_BrowseNodeRequested           = "04C_BROWSE_NODE_REQUESTED"
+	Event_05A_EnrichmentCompleted           = "05A_ENRICHMENT_COMPLETED"
+	Event_05B_EnrichmentFailed              = "05B_ENRICHMENT_FAILED"
+	Event_05D_EnrichmentRetry               = "05D_ENRICHMENT_RETRY"
+
+	// Phase 3: Quality Assessment (06-07)
+	Event_06_QualityAssessmentRequested  = "06_QUALITY_ASSESSMENT_REQUESTED"
+	Event_07A_QualityAssessmentCompleted = "07A_QUALITY_ASSESSMENT_COMPLETED"
+	Event_07B_QualityAssessmentFailed    = "07B_QUALITY_ASSESSMENT_FAILED"
+
+	// Phase 4: Content & Reviews Generation (08-12)
+	Event_08A_ContentGenerationRequested  = "08A_CONTENT_GENERATION_REQUESTED"
+	Event_08B_ReviewsRequested            = "08B_REVIEWS_REQUESTED"
+	Event_09A_ContentGenerationStarted    = "09A_CONTENT_GENERATION_STARTED"
+	Event_09B_ReviewsFetched              = "09B_REVIEWS_FETCHED"
+	Event_10A_ContentGenerated            = "10A_CONTENT_GENERATED"
+	Event_10B_ContentGenerationFailed     = "10B_CONTENT_GENERATION_FAILED"
+	Event_10C_ReviewsProcessed            = "10C_REVIEWS_PROCESSED"
+	Event_10D_ContentGenerationRetried    = "10D_CONTENT_GENERATION_RETRIED"
+	Event_11A_ReviewsValidated            = "11A_REVIEWS_VALIDATED"
+	Event_11B_ReviewsFetchFailed          = "11B_REVIEWS_FETCH_FAILED"
+	Event_12A_ReviewsStored               = "12A_REVIEWS_STORED"
+	Event_12B_ReviewsError                = "12B_REVIEWS_ERROR"
+
+	// Phase 5: Publication & Monitoring (13-14)
+	Event_13_ProductReadyForPublication  = "13_PRODUCT_READY_FOR_PUBLICATION"
+	Event_14A_PriceMonitoringScheduled   = "14A_PRICE_MONITORING_SCHEDULED"
+	Event_14B_AvailabilityCheckScheduled = "14B_AVAILABILITY_CHECK_SCHEDULED"
+	Event_14C_PeriodicUpdateScheduled    = "14C_PERIODIC_UPDATE_SCHEDULED"
+
+	// Additional Events (15+)
+	Event_15A_PriceUpdated             = "15A_PRICE_UPDATED"
+	Event_15B_PriceUpdateFailed        = "15B_PRICE_UPDATE_FAILED"
+	Event_16A_ProductUpdated           = "16A_PRODUCT_UPDATED"
+	Event_16B_ProductUpdateFailed      = "16B_PRODUCT_UPDATE_FAILED"
+	Event_17_ProductAvailabilityChanged = "17_PRODUCT_AVAILABILITY_CHANGED"
+	Event_18_ProductStatusChanged       = "18_PRODUCT_STATUS_CHANGED"
+	Event_19_ProductDeleted             = "19_PRODUCT_DELETED"
+
+	// Legacy event names (deprecated - for backward compatibility)
+	EventTypeNewProductDetected         = Event_01_ProductDetected
+	EventTypeProductValidated           = Event_02A_ProductValidated
+	EventTypeProductIgnored             = Event_02B_ProductIgnored
+	EventTypeProductReviewRequired      = Event_02C_ProductReviewRequired
+	EventTypeContentGenerationRequested = Event_08A_ContentGenerationRequested
+	EventTypeContentGenerationStarted   = Event_09A_ContentGenerationStarted
+	EventTypeContentGenerated           = Event_10A_ContentGenerated
+	EventTypeContentGenerationFailed    = Event_10B_ContentGenerationFailed
+	EventTypeContentGenerationRetried   = Event_10D_ContentGenerationRetried
+	EventTypeReviewsRequested           = Event_08B_ReviewsRequested
+	EventTypeReviewsFetched             = Event_09B_ReviewsFetched
+	EventTypeReviewsProcessed           = Event_10C_ReviewsProcessed
+	EventTypeReviewsValidated           = Event_11A_ReviewsValidated
+	EventTypeReviewsFetchFailed         = Event_11B_ReviewsFetchFailed
+	EventTypeReviewsStored              = Event_12A_ReviewsStored
+	EventTypeReviewsError               = Event_12B_ReviewsError
+	EventTypeBrowseNodeRequested        = Event_04C_BrowseNodeRequested
+	EventTypeBrowseNodeResolved         = "05A_BROWSE_NODE_RESOLVED"
+	EventTypeBrowseNodeFailed           = "05B_BROWSE_NODE_FAILED"
+	EventTypeCheckPrice                 = "CHECK_PRICE"
+	EventTypePriceUpdated               = Event_15A_PriceUpdated
+	EventTypePriceUpdateFailed          = Event_15B_PriceUpdateFailed
+	EventTypeProductUpdated             = Event_16A_ProductUpdated
+	EventTypeProductAvailabilityChanged = Event_17_ProductAvailabilityChanged
+	EventTypeProductStatusChanged       = Event_18_ProductStatusChanged
+	EventTypeProductDeleted             = Event_19_ProductDeleted
+
+	// Deprecated - to be removed
+	EventTypeProductUnavailable        = "PRODUCT_UNAVAILABLE"
+	EventTypeProductCreated             = "PRODUCT_CREATED"
+	EventTypeProductUpdateRequested     = "PRODUCT_UPDATE_REQUESTED"
 	EventTypeContentUpdateRequested     = "CONTENT_UPDATE_REQUESTED"
 	EventTypeContentUpdated             = "CONTENT_UPDATED"
-	EventTypeContentGenerationRetried   = "CONTENT_GENERATION_RETRIED"
 	EventTypeContentAnalysisFailed      = "CONTENT_ANALYSIS_FAILED"
-
-	// Reviews Events
-	EventTypeReviewsRequested   = "REVIEWS_REQUESTED"
-	EventTypeReviewsFetched     = "REVIEWS_FETCHED"
-	EventTypeReviewsStored      = "REVIEWS_STORED"
-	EventTypeReviewsCollected   = "REVIEWS_COLLECTED"
-	EventTypeReviewsFetchFailed = "REVIEWS_FETCH_FAILED"
-	EventTypeReviewsProcessed   = "REVIEWS_PROCESSED"
-	EventTypeReviewsValidated   = "REVIEWS_VALIDATED"
-	EventTypeReviewsEnriched    = "REVIEWS_ENRICHED"
-	EventTypeReviewsCached      = "REVIEWS_CACHED"
-	EventTypeReviewsExpired     = "REVIEWS_EXPIRED"
-	EventTypeReviewsError       = "REVIEWS_ERROR"
-	EventTypeReviewsDeleted     = "REVIEWS_DELETED"
-
-	// Price Tracking Events
-	EventTypeCheckPrice        = "CHECK_PRICE"
-	EventTypePriceUpdated      = "PRICE_UPDATED"
-	EventTypePriceUpdateFailed = "PRICE_UPDATE_FAILED"
-
-	// Browse Node Events
-	EventTypeBrowseNodeRequested       = "BROWSE_NODE_REQUESTED"
-	EventTypeBrowseNodeResolved        = "BROWSE_NODE_RESOLVED"
-	EventTypeBrowseNodeFailed          = "BROWSE_NODE_FAILED"
+	EventTypeReviewsCollected           = "REVIEWS_COLLECTED"
+	EventTypeReviewsEnriched            = "REVIEWS_ENRICHED"
+	EventTypeReviewsCached              = "REVIEWS_CACHED"
+	EventTypeReviewsExpired             = "REVIEWS_EXPIRED"
+	EventTypeReviewsDeleted             = "REVIEWS_DELETED"
 	EventTypeBrowseNodeDetectionFailed = "BROWSE_NODE_DETECTION_FAILED"
-
-	// Product Ignored Event (from event.md)
-	EventTypeProductIgnored        = "PRODUCT_IGNORED"
-	EventTypeProductReviewRequired = "PRODUCT_REVIEW_REQUIRED"
 )
 
-// New event types for orchestration pattern
+// Legacy orchestration event names (mapped to new convention)
 const (
 	// Dimension Enrichment
-	DimensionEnrichmentRequested = "DIMENSION_ENRICHMENT_REQUESTED"
-	DimensionEnrichmentCompleted = "DIMENSION_ENRICHMENT_COMPLETED"
-	DimensionEnrichmentFailed    = "DIMENSION_ENRICHMENT_FAILED"
+	DimensionEnrichmentRequested = Event_04A_DimensionEnrichmentRequested
+	DimensionEnrichmentCompleted = "05A_DIMENSION_ENRICHMENT_COMPLETED"
+	DimensionEnrichmentFailed    = "05B_DIMENSION_ENRICHMENT_FAILED"
 
 	// Quality Assessment
-	QualityAssessmentRequested = "QUALITY_ASSESSMENT_REQUESTED"
-	QualityAssessmentCompleted = "QUALITY_ASSESSMENT_COMPLETED"
-	QualityAssessmentFailed    = "QUALITY_ASSESSMENT_FAILED"
+	QualityAssessmentRequested = Event_06_QualityAssessmentRequested
+	QualityAssessmentCompleted = Event_07A_QualityAssessmentCompleted
+	QualityAssessmentFailed    = Event_07B_QualityAssessmentFailed
 
 	// Scheduling
-	PriceMonitoringScheduled   = "PRICE_MONITORING_SCHEDULED"
-	AvailabilityCheckScheduled = "AVAILABILITY_CHECK_SCHEDULED"
-	PeriodicUpdateScheduled    = "PERIODIC_UPDATE_SCHEDULED"
+	PriceMonitoringScheduled   = Event_14A_PriceMonitoringScheduled
+	AvailabilityCheckScheduled = Event_14B_AvailabilityCheckScheduled
+	PeriodicUpdateScheduled    = Event_14C_PeriodicUpdateScheduled
 
 	// PA-API Color Enrichment
-	ColorEnrichmentRequested    = "COLOR_ENRICHMENT_REQUESTED"
-	ColorEnrichmentCompleted    = "COLOR_ENRICHMENT_COMPLETED"
-	ColorEnrichmentFailed       = "COLOR_ENRICHMENT_FAILED"
-	VariationEnrichmentRequested = "VARIATION_ENRICHMENT_REQUESTED"
-	VariationEnrichmentCompleted = "VARIATION_ENRICHMENT_COMPLETED"
-	VariationEnrichmentFailed    = "VARIATION_ENRICHMENT_FAILED"
+	ColorEnrichmentRequested     = Event_04B_ColorEnrichmentRequested
+	ColorEnrichmentCompleted     = "05A_COLOR_ENRICHMENT_COMPLETED"
+	ColorEnrichmentFailed        = "05B_COLOR_ENRICHMENT_FAILED"
+	VariationEnrichmentRequested = "04B_VARIATION_ENRICHMENT_REQUESTED"
+	VariationEnrichmentCompleted = "05A_VARIATION_ENRICHMENT_COMPLETED"
+	VariationEnrichmentFailed    = "05B_VARIATION_ENRICHMENT_FAILED"
 
 	// PA-API Enrichment Event Types (CloudEvent format)
 	ProductEnrichmentRequestedV1 = "product.enrichment.requested.v1"
