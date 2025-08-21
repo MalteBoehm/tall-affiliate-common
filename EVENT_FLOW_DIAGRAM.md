@@ -31,20 +31,25 @@ graph TD
     E03 --> E04A[04A_DIMENSION_ENRICHMENT_REQUESTED]
     E03 --> E04B[04B_COLOR_ENRICHMENT_REQUESTED]
     E03 --> E04C[04C_BROWSE_NODE_REQUESTED]
+    E03 --> E04D[04D_VARIANTS_ENRICHMENT_REQUESTED]
     
-    E04A -->|Erfolg| E05A1[05A_DIMENSION_ENRICHMENT_COMPLETED]
-    E04A -->|Fehler| E05B1[05B_DIMENSION_ENRICHMENT_FAILED]
+    E04A -->|Erfolg| E05A1[05A_ENRICHMENT_COMPLETED]
+    E04A -->|Fehler| E05B1[05B_ENRICHMENT_FAILED]
     
-    E04B -->|Erfolg| E05A2[05A_COLOR_ENRICHMENT_COMPLETED]
-    E04B -->|Fehler| E05B2[05B_COLOR_ENRICHMENT_FAILED]
-    E04B -->|Retry| E05D[05D_COLOR_ENRICHMENT_RETRY]
+    E04B -->|Erfolg| E05A2[05A_ENRICHMENT_COMPLETED]
+    E04B -->|Fehler| E05B2[05B_ENRICHMENT_FAILED]
     
-    E04C -->|Erfolg| E05A3[05A_BROWSE_NODE_RESOLVED]
-    E04C -->|Fehler| E05B3[05B_BROWSE_NODE_FAILED]
+    E04C -->|Erfolg| E05A3[05A_ENRICHMENT_COMPLETED]
+    E04C -->|Fehler| E05B3[05B_ENRICHMENT_FAILED]
+    
+    E04D -->|Erfolg| E05C[05C_VARIANTS_ENRICHED]
+    E04D -->|Fehler| E05B4[05B_ENRICHMENT_FAILED]
+    E04D -->|Retry| E05D[05D_ENRICHMENT_RETRY]
     
     E05A1 --> E06[06_QUALITY_ASSESSMENT_REQUESTED]
     E05A2 --> E06
     E05A3 --> E06
+    E05C --> E06
     
     E06 -->|Erfolg| E07A[07A_QUALITY_ASSESSMENT_COMPLETED]
     E06 -->|Fehler| E07B[07B_QUALITY_ASSESSMENT_FAILED]
@@ -113,28 +118,50 @@ graph TD
 #### 04A_DIMENSION_ENRICHMENT_REQUESTED
 - **Stream**: `stream:enrichment`
 - **Beschreibung**: Amazon Scraping für physische Maße
-- **Parallel zu**: 04B, 04C
+- **Parallel zu**: 04B, 04C, 04D
 
 #### 04B_COLOR_ENRICHMENT_REQUESTED  
 - **Stream**: `stream:enrichment`
-- **Beschreibung**: PA-API Aufruf für Farbvarianten
-- **Parallel zu**: 04A, 04C
+- **Beschreibung**: PA-API Aufruf für Hauptfarbe
+- **Parallel zu**: 04A, 04C, 04D
 
 #### 04C_BROWSE_NODE_REQUESTED
 - **Stream**: `stream:browse_nodes`
 - **Beschreibung**: Kategorisierung anfordern
-- **Parallel zu**: 04A, 04B
+- **Parallel zu**: 04A, 04B, 04D
 
-#### 05A_DIMENSION_ENRICHMENT_COMPLETED
+#### 04D_VARIANTS_ENRICHMENT_REQUESTED
 - **Stream**: `stream:enrichment`
-- **Payload**: HeightCm, LengthCm, WidthCm
+- **Beschreibung**: PA-API Aufruf für Farb- und Bildvarianten (ein einziger API-Call)
+- **Payload**: Holt gleichzeitig color_variants und image_variants
+- **Parallel zu**: 04A, 04B, 04C
 
-#### 05B_COLOR_ENRICHMENT_FAILED
+#### 05A_ENRICHMENT_COMPLETED
+- **Stream**: `stream:enrichment`
+- **Beschreibung**: Erfolgreiche Anreicherung
+- **Payload**: Je nach Event-Typ (Dimensions, Colors, BrowseNodes, Variants)
+
+#### 05B_ENRICHMENT_FAILED
 - **Stream**: `stream:enrichment`
 - **Fehlertypen**: RequestThrottled, InvalidParameterValue
-- **Aktion**: Bei throttling → 05D_COLOR_ENRICHMENT_RETRY
+- **Aktion**: Bei throttling → 05D_ENRICHMENT_RETRY
 
-#### 05D_COLOR_ENRICHMENT_RETRY
+#### 05C_VARIANTS_ENRICHED
+- **Stream**: `stream:enrichment`
+- **Beschreibung**: Farb- und Bildvarianten erfolgreich angereichert
+- **Payload**:
+```json
+{
+  "color_variants": ["Black", "Navy", "Grey"],
+  "image_variants": {
+    "Black": ["url1", "url2"],
+    "Navy": ["url3", "url4"],
+    "Grey": ["url5", "url6"]
+  }
+}
+```
+
+#### 05D_ENRICHMENT_RETRY
 - **Stream**: `stream:enrichment`
 - **Retry-Strategie**: Exponential backoff (30s, 60s, 120s)
 - **Max Retries**: 3

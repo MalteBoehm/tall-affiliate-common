@@ -23,8 +23,10 @@ const (
 	Event_04A_DimensionEnrichmentRequested  = "04A_DIMENSION_ENRICHMENT_REQUESTED"
 	Event_04B_ColorEnrichmentRequested      = "04B_COLOR_ENRICHMENT_REQUESTED"
 	Event_04C_BrowseNodeRequested           = "04C_BROWSE_NODE_REQUESTED"
+	Event_04D_VariantsEnrichmentRequested   = "04D_VARIANTS_ENRICHMENT_REQUESTED"
 	Event_05A_EnrichmentCompleted           = "05A_ENRICHMENT_COMPLETED"
 	Event_05B_EnrichmentFailed              = "05B_ENRICHMENT_FAILED"
+	Event_05C_VariantsEnriched              = "05C_VARIANTS_ENRICHED"
 	Event_05D_EnrichmentRetry               = "05D_ENRICHMENT_RETRY"
 
 	// Phase 3: Quality Assessment (06-07)
@@ -129,10 +131,18 @@ const (
 	VariationEnrichmentCompleted = "05A_VARIATION_ENRICHMENT_COMPLETED"
 	VariationEnrichmentFailed    = "05B_VARIATION_ENRICHMENT_FAILED"
 
+	// PA-API Variant Enrichment (single call for both color and image variants)
+	VariantsEnrichmentRequested = Event_04D_VariantsEnrichmentRequested
+	VariantsEnrichmentCompleted = Event_05C_VariantsEnriched
+	VariantsEnrichmentFailed    = "05B_VARIANTS_ENRICHMENT_FAILED"
+
 	// PA-API Enrichment Event Types (CloudEvent format)
-	ProductEnrichmentRequestedV1 = "product.enrichment.requested.v1"
-	ProductEnrichmentCompletedV1 = "product.enrichment.completed.v1"
-	ProductEnrichmentFailedV1    = "product.enrichment.failed.v1"
+	ProductEnrichmentRequestedV1    = "product.enrichment.requested.v1"
+	ProductEnrichmentCompletedV1    = "product.enrichment.completed.v1"
+	ProductEnrichmentFailedV1       = "product.enrichment.failed.v1"
+	VariantsEnrichmentRequestedV1   = "product.variants.enrichment.requested.v1"
+	VariantsEnrichmentCompletedV1   = "product.variants.enrichment.completed.v1"
+	VariantsEnrichmentFailedV1      = "product.variants.enrichment.failed.v1"
 )
 
 // Event represents a domain event
