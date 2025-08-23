@@ -35,18 +35,18 @@ const (
 	Event_07B_QualityAssessmentFailed    = "07B_QUALITY_ASSESSMENT_FAILED"
 
 	// Phase 4: Content & Reviews Generation (08-12)
-	Event_08A_ContentGenerationRequested  = "08A_CONTENT_GENERATION_REQUESTED"
-	Event_08B_ReviewsRequested            = "08B_REVIEWS_REQUESTED"
-	Event_09A_ContentGenerationStarted    = "09A_CONTENT_GENERATION_STARTED"
-	Event_09B_ReviewsFetched              = "09B_REVIEWS_FETCHED"
-	Event_10A_ContentGenerated            = "10A_CONTENT_GENERATED"
-	Event_10B_ContentGenerationFailed     = "10B_CONTENT_GENERATION_FAILED"
-	Event_10C_ReviewsProcessed            = "10C_REVIEWS_PROCESSED"
-	Event_10D_ContentGenerationRetried    = "10D_CONTENT_GENERATION_RETRIED"
-	Event_11A_ReviewsValidated            = "11A_REVIEWS_VALIDATED"
-	Event_11B_ReviewsFetchFailed          = "11B_REVIEWS_FETCH_FAILED"
-	Event_12A_ReviewsStored               = "12A_REVIEWS_STORED"
-	Event_12B_ReviewsError                = "12B_REVIEWS_ERROR"
+	Event_08A_ContentGenerationRequested = "08A_CONTENT_GENERATION_REQUESTED"
+	Event_08B_ReviewsRequested           = "08B_REVIEWS_REQUESTED"
+	Event_09A_ContentGenerationStarted   = "09A_CONTENT_GENERATION_STARTED"
+	Event_09B_ReviewsFetched             = "09B_REVIEWS_FETCHED"
+	Event_10A_ContentGenerated           = "10A_CONTENT_GENERATED"
+	Event_10B_ContentGenerationFailed    = "10B_CONTENT_GENERATION_FAILED"
+	Event_10C_ReviewsProcessed           = "10C_REVIEWS_PROCESSED"
+	Event_10D_ContentGenerationRetried   = "10D_CONTENT_GENERATION_RETRIED"
+	Event_11A_ReviewsValidated           = "11A_REVIEWS_VALIDATED"
+	Event_11B_ReviewsFetchFailed         = "11B_REVIEWS_FETCH_FAILED"
+	Event_12A_ReviewsStored              = "12A_REVIEWS_STORED"
+	Event_12B_ReviewsError               = "12B_REVIEWS_ERROR"
 
 	// Phase 5: Publication & Monitoring (13-14)
 	Event_13_ProductReadyForPublication  = "13_PRODUCT_READY_FOR_PUBLICATION"
@@ -55,15 +55,20 @@ const (
 	Event_14C_PeriodicUpdateScheduled    = "14C_PERIODIC_UPDATE_SCHEDULED"
 
 	// Additional Events (15+)
-	Event_15A_PriceUpdated             = "15A_PRICE_UPDATED"
-	Event_15B_PriceUpdateFailed        = "15B_PRICE_UPDATE_FAILED"
-	Event_16A_ProductUpdated           = "16A_PRODUCT_UPDATED"
-	Event_16B_ProductUpdateFailed      = "16B_PRODUCT_UPDATE_FAILED"
+	Event_15A_PriceUpdated              = "15A_PRICE_UPDATED"
+	Event_15B_PriceUpdateFailed         = "15B_PRICE_UPDATE_FAILED"
+	Event_16A_ProductUpdated            = "16A_PRODUCT_UPDATED"
+	Event_16B_ProductUpdateFailed       = "16B_PRODUCT_UPDATE_FAILED"
 	Event_17_ProductAvailabilityChanged = "17_PRODUCT_AVAILABILITY_CHANGED"
 	Event_18_ProductStatusChanged       = "18_PRODUCT_STATUS_CHANGED"
 	Event_19_ProductDeleted             = "19_PRODUCT_DELETED"
 
 	// Legacy event names (deprecated - for backward compatibility)
+	// DEPRECATED: Use numbered constants instead of plain strings:
+	// - "PRODUCT_CREATED" → use Event_02A_ProductValidated or Event_08A_ContentGenerationRequested
+	// - "PRODUCT_IGNORED" → use Event_02B_ProductIgnored
+	// - "CONTENT_GENERATION_REQUESTED" → use Event_08A_ContentGenerationRequested
+	// - "04D_VARIANTS_ENRICHMENT_REQUESTED" → use VariationEnrichmentRequested (04B_VARIATION_ENRICHMENT_REQUESTED)
 	EventTypeNewProductDetected         = Event_01_ProductDetected
 	EventTypeProductValidated           = Event_02A_ProductValidated
 	EventTypeProductIgnored             = Event_02B_ProductIgnored
@@ -93,16 +98,16 @@ const (
 
 	// Deprecated - to be removed
 	EventTypeProductUnavailable        = "PRODUCT_UNAVAILABLE"
-	EventTypeProductCreated             = "PRODUCT_CREATED"
-	EventTypeProductUpdateRequested     = "PRODUCT_UPDATE_REQUESTED"
-	EventTypeContentUpdateRequested     = "CONTENT_UPDATE_REQUESTED"
-	EventTypeContentUpdated             = "CONTENT_UPDATED"
-	EventTypeContentAnalysisFailed      = "CONTENT_ANALYSIS_FAILED"
-	EventTypeReviewsCollected           = "REVIEWS_COLLECTED"
-	EventTypeReviewsEnriched            = "REVIEWS_ENRICHED"
-	EventTypeReviewsCached              = "REVIEWS_CACHED"
-	EventTypeReviewsExpired             = "REVIEWS_EXPIRED"
-	EventTypeReviewsDeleted             = "REVIEWS_DELETED"
+	EventTypeProductCreated            = "PRODUCT_CREATED"
+	EventTypeProductUpdateRequested    = "PRODUCT_UPDATE_REQUESTED"
+	EventTypeContentUpdateRequested    = "CONTENT_UPDATE_REQUESTED"
+	EventTypeContentUpdated            = "CONTENT_UPDATED"
+	EventTypeContentAnalysisFailed     = "CONTENT_ANALYSIS_FAILED"
+	EventTypeReviewsCollected          = "REVIEWS_COLLECTED"
+	EventTypeReviewsEnriched           = "REVIEWS_ENRICHED"
+	EventTypeReviewsCached             = "REVIEWS_CACHED"
+	EventTypeReviewsExpired            = "REVIEWS_EXPIRED"
+	EventTypeReviewsDeleted            = "REVIEWS_DELETED"
 	EventTypeBrowseNodeDetectionFailed = "BROWSE_NODE_DETECTION_FAILED"
 )
 
@@ -137,12 +142,12 @@ const (
 	VariantsEnrichmentFailed    = "05B_VARIANTS_ENRICHMENT_FAILED"
 
 	// PA-API Enrichment Event Types (CloudEvent format)
-	ProductEnrichmentRequestedV1    = "product.enrichment.requested.v1"
-	ProductEnrichmentCompletedV1    = "product.enrichment.completed.v1"
-	ProductEnrichmentFailedV1       = "product.enrichment.failed.v1"
-	VariantsEnrichmentRequestedV1   = "product.variants.enrichment.requested.v1"
-	VariantsEnrichmentCompletedV1   = "product.variants.enrichment.completed.v1"
-	VariantsEnrichmentFailedV1      = "product.variants.enrichment.failed.v1"
+	ProductEnrichmentRequestedV1  = "product.enrichment.requested.v1"
+	ProductEnrichmentCompletedV1  = "product.enrichment.completed.v1"
+	ProductEnrichmentFailedV1     = "product.enrichment.failed.v1"
+	VariantsEnrichmentRequestedV1 = "product.variants.enrichment.requested.v1"
+	VariantsEnrichmentCompletedV1 = "product.variants.enrichment.completed.v1"
+	VariantsEnrichmentFailedV1    = "product.variants.enrichment.failed.v1"
 )
 
 // Event represents a domain event
@@ -808,6 +813,38 @@ func NewProductEnrichmentRequestedEvent(source string, data *ProductEnrichmentRe
 // NewProductEnrichedEvent creates a new PA-API enrichment success event
 func NewProductEnrichedEvent(source string, data *ProductEnrichedData) (*Event, error) {
 	return NewEvent(ProductEnrichmentCompletedV1, "product", data.ASIN, data)
+}
+
+// NormalizeEventType maps legacy/ad-hoc event strings to canonical numbered constants.
+// Returns (canonical_event, true) if mapping exists, otherwise (original_string, false).
+// This helper allows services to centrally handle legacy event names during migration.
+func NormalizeEventType(s string) (string, bool) {
+	switch s {
+	case "CONTENT_GENERATION_REQUESTED":
+		return Event_08A_ContentGenerationRequested, true
+	case "CONTENT_GENERATED":
+		return Event_10A_ContentGenerated, true
+	case "CONTENT_GENERATION_FAILED":
+		return Event_10B_ContentGenerationFailed, true
+	case "PRODUCT_VALIDATED":
+		return Event_02A_ProductValidated, true
+	case "PRODUCT_IGNORED":
+		return Event_02B_ProductIgnored, true
+	case "PRODUCT_REVIEW_REQUIRED":
+		return Event_02C_ProductReviewRequired, true
+	case "04D_VARIANTS_ENRICHMENT_REQUESTED":
+		return VariationEnrichmentRequested, true
+	case "ENRICHMENT_RETRY":
+		return Event_05D_EnrichmentRetry, true
+	case "QUALITY_ASSESSMENT_REQUESTED":
+		return Event_06_QualityAssessmentRequested, true
+	case "QUALITY_ASSESSMENT_COMPLETED":
+		return Event_07A_QualityAssessmentCompleted, true
+	case "QUALITY_ASSESSMENT_FAILED":
+		return Event_07B_QualityAssessmentFailed, true
+	default:
+		return s, false
+	}
 }
 
 // NewProductEnrichmentFailedEvent creates a new PA-API enrichment failure event
