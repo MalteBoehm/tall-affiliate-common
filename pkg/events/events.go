@@ -220,11 +220,14 @@ type BrowseNodeFailedPayload struct {
 
 // ContentGeneratedPayload represents the payload for a CONTENT_GENERATED event
 type ContentGeneratedPayload struct {
-	ASIN        string    `json:"asin"`
-	ProductID   string    `json:"product_id"`
-	ContentType string    `json:"content_type"` // z.B. "description", "faq"
-	ContentID   string    `json:"content_id,omitempty"`
-	GeneratedAt time.Time `json:"generated_at"`
+	ASIN           string    `json:"asin"`
+	ProductID      string    `json:"product_id"`
+	ContentType    string    `json:"content_type"` // z.B. "description", "faq"
+	ContentID      string    `json:"content_id,omitempty"`
+	GeneratedAt    time.Time `json:"generated_at"`
+	ReviewsContent string    `json:"reviews_content,omitempty"`
+	FAQContent     string    `json:"faq_content,omitempty"`
+	Gender         string    `json:"gender,omitempty"`
 }
 
 // ContentGenerationFailedPayload represents the payload for a CONTENT_GENERATION_FAILED event
