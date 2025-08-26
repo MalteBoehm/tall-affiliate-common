@@ -814,12 +814,62 @@ func NormalizeEventType(s string) (string, bool) {
 	case "QUALITY_ASSESSMENT_FAILED":
 		return Event_07B_QualityAssessmentFailed, true
 	// Product lifecycle events - CloudEvents format mapping
-	case "product.deleted.v1":
+	case "product.deleted.v1", ProductDeletedV1:
 		return Event_19_ProductDeleted, true
-	case "product.status.changed.v1":
+	case "product.status.changed.v1", ProductStatusChangedV1:
 		return Event_18_ProductStatusChanged, true
-	case "product.availability.changed.v1":
+	case "product.availability.changed.v1", ProductAvailabilityChangedV1:
 		return Event_17_ProductAvailabilityChanged, true
+	case "product.updated.v1", ProductUpdatedV1:
+		return Event_16A_ProductUpdated, true
+	case "product.update_failed.v1", ProductUpdateFailedV1:
+		return Event_16B_ProductUpdateFailed, true
+	case "price.updated.v1", PriceUpdatedV1:
+		return Event_15A_PriceUpdated, true
+	case "price.update_failed.v1", PriceUpdateFailedV1:
+		return Event_15B_PriceUpdateFailed, true
+	case "product.ready_for_publication.v1", ProductReadyForPublicationV1:
+		return Event_13_ProductReadyForPublication, true
+	// Scheduling events
+	case "price.monitoring.scheduled.v1", PriceMonitoringScheduledV1:
+		return Event_14A_PriceMonitoringScheduled, true
+	case "product.availability_check.scheduled.v1", AvailabilityCheckScheduledV1:
+		return Event_14B_AvailabilityCheckScheduled, true
+	case "product.periodic_update.scheduled.v1", PeriodicUpdateScheduledV1:
+		return Event_14C_PeriodicUpdateScheduled, true
+	// Content generation events
+	case "content.generation.requested.v1", ContentGenerationRequestedV1:
+		return Event_08A_ContentGenerationRequested, true
+	case "content.generation.started.v1", ContentGenerationStartedV1:
+		return Event_09A_ContentGenerationStarted, true
+	case "content.generated.v1", ContentGeneratedV1:
+		return Event_10A_ContentGenerated, true
+	case "content.generation.failed.v1", ContentGenerationFailedV1:
+		return Event_10B_ContentGenerationFailed, true
+	case "content.generation.retried.v1", ContentGenerationRetriedV1:
+		return Event_10D_ContentGenerationRetried, true
+	// Reviews events
+	case "reviews.requested.v1", ReviewsRequestedV1:
+		return Event_08B_ReviewsRequested, true
+	case "reviews.fetched.v1", ReviewsFetchedV1:
+		return Event_09B_ReviewsFetched, true
+	case "reviews.processed.v1", ReviewsProcessedV1:
+		return Event_10C_ReviewsProcessed, true
+	case "reviews.validated.v1", ReviewsValidatedV1:
+		return Event_11A_ReviewsValidated, true
+	case "reviews.fetch_failed.v1", ReviewsFetchFailedV1:
+		return Event_11B_ReviewsFetchFailed, true
+	case "reviews.stored.v1", ReviewsStoredV1:
+		return Event_12A_ReviewsStored, true
+	case "reviews.error.v1", ReviewsErrorV1:
+		return Event_12B_ReviewsError, true
+	// Quality assessment events
+	case "quality.assessment.requested.v1", QualityAssessmentRequestedV1:
+		return Event_06_QualityAssessmentRequested, true
+	case "quality.assessment.completed.v1", QualityAssessmentCompletedV1:
+		return Event_07A_QualityAssessmentCompleted, true
+	case "quality.assessment.failed.v1", QualityAssessmentFailedV1:
+		return Event_07B_QualityAssessmentFailed, true
 	// Catalog enrichment events mapping
 	case "catalog.product.enrichment.requested.v1":
 		return CatalogProductEnrichmentRequestedV1, true
