@@ -24,44 +24,44 @@ const (
 	Event_04B_ColorEnrichmentRequested     = "04B_COLOR_ENRICHMENT_REQUESTED"
 	// DEPRECATED: Event_04C_BrowseNodeRequested removed - use CatalogProductEnrichmentRequestedV1 instead
 	Event_04D_VariantsEnrichmentRequested = "04D_VARIANTS_ENRICHMENT_REQUESTED"
-	Event_05A_EnrichmentCompleted         = "05A_ENRICHMENT_COMPLETED"
-	Event_05B_EnrichmentFailed            = "05B_ENRICHMENT_FAILED"
-	Event_05C_VariantsEnriched            = "05C_VARIANTS_ENRICHED"
-	Event_05D_EnrichmentRetry             = "05D_ENRICHMENT_RETRY"
+	Event_05A_EnrichmentCompleted         = EnrichmentCompletedV1         // Migrated to CloudEvents
+	Event_05B_EnrichmentFailed            = EnrichmentFailedV1            // Migrated to CloudEvents
+	Event_05C_VariantsEnriched            = VariantsEnrichedV1            // Migrated to CloudEvents
+	Event_05D_EnrichmentRetry             = EnrichmentRetryV1             // Migrated to CloudEvents
 
 	// Phase 3: Quality Assessment (06-07)
-	Event_06_QualityAssessmentRequested  = "06_QUALITY_ASSESSMENT_REQUESTED"
-	Event_07A_QualityAssessmentCompleted = "07A_QUALITY_ASSESSMENT_COMPLETED"
-	Event_07B_QualityAssessmentFailed    = "07B_QUALITY_ASSESSMENT_FAILED"
+	Event_06_QualityAssessmentRequested  = QualityAssessmentRequestedV1  // Migrated to CloudEvents
+	Event_07A_QualityAssessmentCompleted = QualityAssessmentCompletedV1 // Migrated to CloudEvents
+	Event_07B_QualityAssessmentFailed    = QualityAssessmentFailedV1    // Migrated to CloudEvents
 
 	// Phase 4: Content & Reviews Generation (08-12)
 	Event_08A_ContentGenerationRequested = "08A_CONTENT_GENERATION_REQUESTED"
-	Event_08B_ReviewsRequested           = "08B_REVIEWS_REQUESTED"
+	Event_08B_ReviewsRequested           = ReviewsRequestedV1           // Migrated to CloudEvents
 	Event_09A_ContentGenerationStarted   = "09A_CONTENT_GENERATION_STARTED"
-	Event_09B_ReviewsFetched             = "09B_REVIEWS_FETCHED"
+	Event_09B_ReviewsFetched             = ReviewsFetchedV1             // Migrated to CloudEvents
 	Event_10A_ContentGenerated           = "10A_CONTENT_GENERATED"
 	Event_10B_ContentGenerationFailed    = "10B_CONTENT_GENERATION_FAILED"
-	Event_10C_ReviewsProcessed           = "10C_REVIEWS_PROCESSED"
-	Event_10D_ContentGenerationRetried   = "10D_CONTENT_GENERATION_RETRIED"
-	Event_11A_ReviewsValidated           = "11A_REVIEWS_VALIDATED"
-	Event_11B_ReviewsFetchFailed         = "11B_REVIEWS_FETCH_FAILED"
-	Event_12A_ReviewsStored              = "12A_REVIEWS_STORED"
-	Event_12B_ReviewsError               = "12B_REVIEWS_ERROR"
+	Event_10C_ReviewsProcessed           = ReviewsProcessedV1           // Migrated to CloudEvents
+	Event_10D_ContentGenerationRetried   = ContentGenerationRetriedV1   // Migrated to CloudEvents
+	Event_11A_ReviewsValidated           = ReviewsValidatedV1           // Migrated to CloudEvents
+	Event_11B_ReviewsFetchFailed         = ReviewsFetchFailedV1         // Migrated to CloudEvents
+	Event_12A_ReviewsStored              = ReviewsStoredV1              // Migrated to CloudEvents
+	Event_12B_ReviewsError               = ReviewsErrorV1               // Migrated to CloudEvents
 
 	// Phase 5: Publication & Monitoring (13-14)
-	Event_13_ProductReadyForPublication  = "13_PRODUCT_READY_FOR_PUBLICATION"
-	Event_14A_PriceMonitoringScheduled   = "14A_PRICE_MONITORING_SCHEDULED"
-	Event_14B_AvailabilityCheckScheduled = "14B_AVAILABILITY_CHECK_SCHEDULED"
-	Event_14C_PeriodicUpdateScheduled    = "14C_PERIODIC_UPDATE_SCHEDULED"
+	Event_13_ProductReadyForPublication  = ProductReadyForPublicationV1  // Migrated to CloudEvents
+	Event_14A_PriceMonitoringScheduled   = PriceMonitoringScheduledV1   // Migrated to CloudEvents
+	Event_14B_AvailabilityCheckScheduled = AvailabilityCheckScheduledV1 // Migrated to CloudEvents
+	Event_14C_PeriodicUpdateScheduled    = PeriodicUpdateScheduledV1    // Migrated to CloudEvents
 
 	// Additional Events (15+)
-	Event_15A_PriceUpdated              = "15A_PRICE_UPDATED"
-	Event_15B_PriceUpdateFailed         = "15B_PRICE_UPDATE_FAILED"
-	Event_16A_ProductUpdated            = "16A_PRODUCT_UPDATED"
-	Event_16B_ProductUpdateFailed       = "16B_PRODUCT_UPDATE_FAILED"
+	Event_15A_PriceUpdated              = PriceUpdatedV1              // Migrated to CloudEvents
+	Event_15B_PriceUpdateFailed         = PriceUpdateFailedV1         // Migrated to CloudEvents
+	Event_16A_ProductUpdated            = ProductUpdatedV1            // Migrated to CloudEvents
+	Event_16B_ProductUpdateFailed       = ProductUpdateFailedV1       // Migrated to CloudEvents
 	Event_17_ProductAvailabilityChanged = "17_PRODUCT_AVAILABILITY_CHANGED"
-	Event_18_ProductStatusChanged       = "18_PRODUCT_STATUS_CHANGED"
-	Event_19_ProductDeleted             = "19_PRODUCT_DELETED"
+	Event_18_ProductStatusChanged       = ProductStatusChangedV1      // Migrated to CloudEvents
+	Event_19_ProductDeleted             = ProductDeletedV1            // Migrated to CloudEvents
 
 	// Legacy event names (deprecated - for backward compatibility)
 	// DEPRECATED: Use numbered constants instead of plain strings:
@@ -175,6 +175,12 @@ const (
 	CatalogProductEnrichmentRequestedV1 = "catalog.product.enrichment.requested.v1"
 	CatalogProductEnrichmentCompletedV1 = "catalog.product.enrichment.completed.v1"
 	CatalogProductEnrichmentFailedV1    = "catalog.product.enrichment.failed.v1"
+	
+	// Enrichment Events (Legacy 05 series)
+	EnrichmentCompletedV1 = "enrichment.completed.v1"
+	EnrichmentFailedV1    = "enrichment.failed.v1"
+	VariantsEnrichedV1    = "variants.enriched.v1"
+	EnrichmentRetryV1     = "enrichment.retry.v1"
 
 	// Quality Assessment Events
 	QualityAssessmentRequestedV1 = "quality.assessment.requested.v1"
