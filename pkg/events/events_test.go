@@ -40,18 +40,7 @@ func TestNewEvent(t *testing.T) {
 			},
 			wantErr: false,
 		},
-		{
-			name:          "valid browse node event",
-			eventType:     EventTypeBrowseNodeRequested,
-			aggregateType: "browse_node",
-			aggregateID:   "product-789",
-			payload: BrowseNodeRequestedPayload{
-				ASIN:        "B07PXGQC1Q",
-				ProductID:   "product-789",
-				RequestedAt: time.Now(),
-			},
-			wantErr: false,
-		},
+		// Browse node test case removed - events deprecated
 	}
 
 	for _, tt := range tests {
@@ -144,11 +133,7 @@ func TestEventTypes(t *testing.T) {
 		EventTypeReviewsError,
 		EventTypeReviewsDeleted,
 
-		// Browse Node Events
-		EventTypeBrowseNodeRequested,
-		EventTypeBrowseNodeResolved,
-		EventTypeBrowseNodeFailed,
-		EventTypeBrowseNodeDetectionFailed,
+		// Browse Node Events removed
 
 		// Price Tracking Events
 		EventTypeCheckPrice,
@@ -212,16 +197,7 @@ func TestPayloadStructures(t *testing.T) {
 	})
 
 	t.Run("BrowseNodeRequestedPayload", func(t *testing.T) {
-		now := time.Now()
-		payload := BrowseNodeRequestedPayload{
-			ASIN:        "B07PXGQC1Q",
-			ProductID:   "product-123",
-			RequestedAt: now,
-		}
-
-		assert.Equal(t, "B07PXGQC1Q", payload.ASIN)
-		assert.Equal(t, "product-123", payload.ProductID)
-		assert.Equal(t, now, payload.RequestedAt)
+		// BrowseNodeRequestedPayload test removed - payload type deprecated
 	})
 
 	t.Run("ContentGeneratedPayload", func(t *testing.T) {

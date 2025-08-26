@@ -23,8 +23,7 @@ const (
 	// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 instead. Flow replaced by batch-enricher + PA-API.
 	Event_04A_DimensionEnrichmentRequested = "04A_DIMENSION_ENRICHMENT_REQUESTED"
 	Event_04B_ColorEnrichmentRequested     = "04B_COLOR_ENRICHMENT_REQUESTED"
-	// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 instead. Flow replaced by batch-enricher + PA-API.
-	Event_04C_BrowseNodeRequested         = "04C_BROWSE_NODE_REQUESTED"
+	// DEPRECATED: Event_04C_BrowseNodeRequested removed - use CatalogProductEnrichmentRequestedV1 instead
 	Event_04D_VariantsEnrichmentRequested = "04D_VARIANTS_ENRICHMENT_REQUESTED"
 	Event_05A_EnrichmentCompleted         = "05A_ENRICHMENT_COMPLETED"
 	Event_05B_EnrichmentFailed            = "05B_ENRICHMENT_FAILED"
@@ -87,12 +86,7 @@ const (
 	EventTypeReviewsFetchFailed         = Event_11B_ReviewsFetchFailed
 	EventTypeReviewsStored              = Event_12A_ReviewsStored
 	EventTypeReviewsError               = Event_12B_ReviewsError
-	// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 instead
-	EventTypeBrowseNodeRequested = Event_04C_BrowseNodeRequested
-	// DEPRECATED: Use CatalogProductEnrichmentCompletedV1 instead
-	EventTypeBrowseNodeResolved = "05A_BROWSE_NODE_RESOLVED"
-	// DEPRECATED: Use CatalogProductEnrichmentFailedV1 instead
-	EventTypeBrowseNodeFailed           = "05B_BROWSE_NODE_FAILED"
+	// DEPRECATED: Browse Node events removed - use CatalogProductEnrichment events instead
 	EventTypeCheckPrice                 = "CHECK_PRICE"
 	EventTypePriceUpdated               = Event_15A_PriceUpdated
 	EventTypePriceUpdateFailed          = Event_15B_PriceUpdateFailed
@@ -113,8 +107,7 @@ const (
 	EventTypeReviewsCached          = "REVIEWS_CACHED"
 	EventTypeReviewsExpired         = "REVIEWS_EXPIRED"
 	EventTypeReviewsDeleted         = "REVIEWS_DELETED"
-	// DEPRECATED: Browse node detection is now handled internally by services
-	EventTypeBrowseNodeDetectionFailed = "BROWSE_NODE_DETECTION_FAILED"
+	// DEPRECATED: Browse node detection removed - handled internally by services
 )
 
 // Legacy orchestration event names (mapped to new convention)
@@ -255,31 +248,8 @@ type ContentGenerationRequestedPayload struct {
 	RequestedAt time.Time `json:"requested_at"`
 }
 
-// BrowseNodeRequestedPayload represents the payload for a BROWSE_NODE_REQUESTED event
-// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 with ProductEnrichmentRequestedData instead
-type BrowseNodeRequestedPayload struct {
-	ASIN        string    `json:"asin"`
-	ProductID   string    `json:"product_id"`
-	RequestedAt time.Time `json:"requested_at"`
-}
-
-// BrowseNodeResolvedPayload represents the payload for a BROWSE_NODE_RESOLVED event
-// DEPRECATED: Use CatalogProductEnrichmentCompletedV1 with ProductEnrichedData instead
-type BrowseNodeResolvedPayload struct {
-	ASIN         string    `json:"asin"`
-	ProductID    string    `json:"product_id"`
-	BrowseNodeID string    `json:"browse_node_id"`
-	ResolvedAt   time.Time `json:"resolved_at"`
-}
-
-// BrowseNodeFailedPayload represents the payload for a BROWSE_NODE_FAILED event
-// DEPRECATED: Use CatalogProductEnrichmentFailedV1 with ProductEnrichmentFailedData instead
-type BrowseNodeFailedPayload struct {
-	ASIN      string    `json:"asin"`
-	ProductID string    `json:"product_id"`
-	Reason    string    `json:"reason"`
-	FailedAt  time.Time `json:"failed_at"`
-}
+// DEPRECATED: BrowseNode payload types removed
+// Use ProductEnrichmentRequestedData, ProductEnrichedData, and ProductEnrichmentFailedData instead
 
 // ContentGeneratedPayload represents the payload for a CONTENT_GENERATED event
 type ContentGeneratedPayload struct {

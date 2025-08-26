@@ -66,16 +66,7 @@ func (s *ServiceEventAdapter) PublishContentEvent(ctx context.Context, eventType
 	return s.PublishEvent(ctx, streamName, event)
 }
 
-// PublishBrowseNodeEvent publishes a browse node-related event
-func (s *ServiceEventAdapter) PublishBrowseNodeEvent(ctx context.Context, eventType, productID string, payload any) error {
-	event, err := events.NewEvent(eventType, "browse_node", productID, payload)
-	if err != nil {
-		return err
-	}
-
-	streamName := DetermineTargetStream(eventType)
-	return s.PublishEvent(ctx, streamName, event)
-}
+// DEPRECATED: PublishBrowseNodeEvent removed - use PublishEnrichmentEvent with ProductEnrichmentRequestedData instead
 
 // DetermineTargetStream determines the target stream based on event type
 func DetermineTargetStream(eventType string) string {
@@ -84,8 +75,7 @@ func DetermineTargetStream(eventType string) string {
 		return "stream:product_lifecycle"
 	case isContentGenerationEvent(eventType):
 		return "stream:content_generation"
-	case isBrowseNodeEvent(eventType):
-		return "stream:browse_nodes"
+	// DEPRECATED: Browse node events removed
 	case isPriceTrackingEvent(eventType):
 		return "stream:price_tracking"
 	default:
@@ -135,21 +125,7 @@ func isContentGenerationEvent(eventType string) bool {
 	return false
 }
 
-func isBrowseNodeEvent(eventType string) bool {
-	browseNodeEvents := []string{
-		events.EventTypeBrowseNodeRequested,
-		events.EventTypeBrowseNodeResolved,
-		events.EventTypeBrowseNodeFailed,
-		events.EventTypeBrowseNodeDetectionFailed,
-	}
-
-	for _, bne := range browseNodeEvents {
-		if bne == eventType {
-			return true
-		}
-	}
-	return false
-}
+// DEPRECATED: isBrowseNodeEvent removed - browse node events no longer supported
 
 func isPriceTrackingEvent(eventType string) bool {
 	priceEvents := []string{

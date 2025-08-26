@@ -135,32 +135,7 @@ func TestServiceEventAdapter_PublishContentEvent(t *testing.T) {
 	mockProducer.AssertExpectations(t)
 }
 
-func TestServiceEventAdapter_PublishBrowseNodeEvent(t *testing.T) {
-	mockProducer := new(MockProducer)
-	mockConsumer := new(MockConsumer)
-	adapter := NewServiceEventAdapter(mockProducer, mockConsumer)
-
-	ctx := context.Background()
-	eventType := events.EventTypeBrowseNodeRequested
-	productID := "product-123"
-	payload := events.BrowseNodeRequestedPayload{
-		ASIN:        "B07PXGQC1Q",
-		ProductID:   productID,
-		RequestedAt: time.Now(),
-	}
-
-	// Mock the expected call
-	mockProducer.On("PublishEvent", ctx, "stream:browse_nodes", mock.MatchedBy(func(event *events.Event) bool {
-		return event.Type == eventType &&
-			event.AggregateType == "browse_node" &&
-			event.AggregateID == productID
-	})).Return(nil)
-
-	err := adapter.PublishBrowseNodeEvent(ctx, eventType, productID, payload)
-
-	assert.NoError(t, err)
-	mockProducer.AssertExpectations(t)
-}
+// TestServiceEventAdapter_PublishBrowseNodeEvent removed - browse node events deprecated
 
 func TestDetermineTargetStream(t *testing.T) {
 	tests := []struct {
@@ -178,11 +153,7 @@ func TestDetermineTargetStream(t *testing.T) {
 			eventType: events.EventTypeContentGenerationRequested,
 			expected:  "stream:content_generation",
 		},
-		{
-			name:      "browse node event",
-			eventType: events.EventTypeBrowseNodeRequested,
-			expected:  "stream:browse_nodes",
-		},
+		// Browse node test case removed
 		{
 			name:      "price tracking event",
 			eventType: events.EventTypeCheckPrice,
@@ -218,12 +189,7 @@ func TestEventCategorization(t *testing.T) {
 		assert.False(t, isContentGenerationEvent("UNKNOWN_EVENT"))
 	})
 
-	t.Run("isBrowseNodeEvent", func(t *testing.T) {
-		assert.True(t, isBrowseNodeEvent(events.EventTypeBrowseNodeRequested))
-		assert.True(t, isBrowseNodeEvent(events.EventTypeBrowseNodeResolved))
-		assert.False(t, isBrowseNodeEvent(events.EventTypeNewProductDetected))
-		assert.False(t, isBrowseNodeEvent("UNKNOWN_EVENT"))
-	})
+	// isBrowseNodeEvent test removed - function deprecated
 
 	t.Run("isPriceTrackingEvent", func(t *testing.T) {
 		assert.True(t, isPriceTrackingEvent(events.EventTypeCheckPrice))

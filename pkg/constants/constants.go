@@ -5,7 +5,7 @@ package constants
 const (
 	StreamContentGeneration = "stream:content_generation"
 	StreamProductLifecycle  = "stream:product_lifecycle"
-	StreamBrowseNodes       = "stream:browse_nodes"
+	// StreamBrowseNodes removed - use StreamProductLifecycle for enrichment
 	StreamPriceTracking     = "stream:price_tracking"
 )
 
@@ -13,7 +13,7 @@ const (
 const (
 	GroupProductLifecycle  = "group:product_lifecycle"
 	GroupContentGeneration = "group:content_generation"
-	GroupBrowseNodes       = "group:browse_nodes"
+	// GroupBrowseNodes removed
 	GroupPriceTracking     = "group:price_tracking"
 )
 
@@ -21,7 +21,7 @@ const (
 const (
 	WorkerProductLifecycle  = "product_lifecycle_worker"
 	WorkerContentGeneration = "content_generation_worker"
-	WorkerBrowseNodes       = "browse_node_worker"
+	// WorkerBrowseNodes removed
 	WorkerPriceTracking     = "price_tracking_worker"
 )
 
@@ -30,5 +30,5 @@ const (
 	TableProduct      = "product"
 	TableOutbox       = "outbox"
 	TablePriceHistory = "price_history"
-	TableBrowseNode   = "browse_node"
+	// TableBrowseNode removed
 )
