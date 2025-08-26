@@ -20,8 +20,7 @@ const (
 
 	// Phase 2: Enrichment Orchestration (03-05)
 	Event_03_EnrichmentOrchestrationStarted = "03_ENRICHMENT_ORCHESTRATION_STARTED"
-	// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 instead. Flow replaced by batch-enricher + PA-API.
-	Event_04A_DimensionEnrichmentRequested = "04A_DIMENSION_ENRICHMENT_REQUESTED"
+	// DEPRECATED: Event_04A_DimensionEnrichmentRequested removed - use CatalogProductEnrichmentRequestedV1 instead
 	Event_04B_ColorEnrichmentRequested     = "04B_COLOR_ENRICHMENT_REQUESTED"
 	// DEPRECATED: Event_04C_BrowseNodeRequested removed - use CatalogProductEnrichmentRequestedV1 instead
 	Event_04D_VariantsEnrichmentRequested = "04D_VARIANTS_ENRICHMENT_REQUESTED"
@@ -112,12 +111,7 @@ const (
 
 // Legacy orchestration event names (mapped to new convention)
 const (
-	// Dimension Enrichment - DEPRECATED: Use CatalogProductEnrichmentRequestedV1 instead
-	DimensionEnrichmentRequested = Event_04A_DimensionEnrichmentRequested
-	// DEPRECATED: Use CatalogProductEnrichmentCompletedV1 instead
-	DimensionEnrichmentCompleted = "05A_DIMENSION_ENRICHMENT_COMPLETED"
-	// DEPRECATED: Use CatalogProductEnrichmentFailedV1 instead
-	DimensionEnrichmentFailed = "05B_DIMENSION_ENRICHMENT_FAILED"
+	// DEPRECATED: Dimension Enrichment events removed - use CatalogProductEnrichment events instead
 
 	// Quality Assessment
 	QualityAssessmentRequested = Event_06_QualityAssessmentRequested
@@ -347,35 +341,8 @@ type ProductReviewRequiredPayload struct {
 	RequiredAt      time.Time `json:"required_at"`
 }
 
-// DimensionEnrichmentRequestedPayload represents the payload for dimension enrichment request
-// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 with ProductEnrichmentRequestedData instead
-type DimensionEnrichmentRequestedPayload struct {
-	ASIN          string    `json:"asin"`
-	ProductID     string    `json:"product_id"`
-	DetailPageURL string    `json:"detail_page_url"`
-	RequestedAt   time.Time `json:"requested_at"`
-}
-
-// DimensionEnrichmentCompletedPayload represents the payload for successful dimension enrichment
-// DEPRECATED: Use CatalogProductEnrichmentCompletedV1 with ProductEnrichedData instead
-type DimensionEnrichmentCompletedPayload struct {
-	ASIN        string    `json:"asin"`
-	ProductID   string    `json:"product_id"`
-	HeightCm    *float64  `json:"height_cm,omitempty"`
-	LengthCm    *float64  `json:"length_cm,omitempty"`
-	WidthCm     *float64  `json:"width_cm,omitempty"`
-	Source      string    `json:"source"` // "amazon-scraper"
-	CompletedAt time.Time `json:"completed_at"`
-}
-
-// DimensionEnrichmentFailedPayload represents the payload for failed dimension enrichment
-// DEPRECATED: Use CatalogProductEnrichmentFailedV1 with ProductEnrichmentFailedData instead
-type DimensionEnrichmentFailedPayload struct {
-	ASIN      string    `json:"asin"`
-	ProductID string    `json:"product_id"`
-	Reason    string    `json:"reason"`
-	FailedAt  time.Time `json:"failed_at"`
-}
+// DEPRECATED: DimensionEnrichment payload types removed
+// Use ProductEnrichmentRequestedData, ProductEnrichedData, and ProductEnrichmentFailedData instead
 
 // QualityAssessmentRequestedPayload represents the payload for quality assessment request
 type QualityAssessmentRequestedPayload struct {
@@ -664,50 +631,12 @@ func GetReviewsEventPriority(eventType string) int {
 
 // Helper functions for orchestration events
 
-// NewDimensionEnrichmentRequestedEvent creates a new dimension enrichment requested event
-// DEPRECATED: Use NewProductEnrichmentRequestedEvent with CatalogProductEnrichmentRequestedV1 instead
-func NewDimensionEnrichmentRequestedEvent(asin, productID, detailPageURL string) *Event {
-	payload := DimensionEnrichmentRequestedPayload{
-		ASIN:          asin,
-		ProductID:     productID,
-		DetailPageURL: detailPageURL,
-		RequestedAt:   time.Now().UTC(),
-	}
-
-	event, _ := NewEvent(DimensionEnrichmentRequested, "product", productID, payload)
-	return event
-}
-
-// NewDimensionEnrichmentCompletedEvent creates a new dimension enrichment completed event
-// DEPRECATED: Use NewProductEnrichedEvent with CatalogProductEnrichmentCompletedV1 instead
-func NewDimensionEnrichmentCompletedEvent(asin, productID string, heightCm, lengthCm, widthCm *float64) *Event {
-	payload := DimensionEnrichmentCompletedPayload{
-		ASIN:        asin,
-		ProductID:   productID,
-		HeightCm:    heightCm,
-		LengthCm:    lengthCm,
-		WidthCm:     widthCm,
-		Source:      "amazon-scraper",
-		CompletedAt: time.Now().UTC(),
-	}
-
-	event, _ := NewEvent(DimensionEnrichmentCompleted, "product", productID, payload)
-	return event
-}
-
-// NewDimensionEnrichmentFailedEvent creates a new dimension enrichment failed event
-// DEPRECATED: Use NewProductEnrichmentFailedEvent with CatalogProductEnrichmentFailedV1 instead
-func NewDimensionEnrichmentFailedEvent(asin, productID, reason string) *Event {
-	payload := DimensionEnrichmentFailedPayload{
-		ASIN:      asin,
-		ProductID: productID,
-		Reason:    reason,
-		FailedAt:  time.Now().UTC(),
-	}
-
-	event, _ := NewEvent(DimensionEnrichmentFailed, "product", productID, payload)
-	return event
-}
+// DEPRECATED: Dimension Enrichment constructor functions removed
+// Use PA-API enrichment events instead:
+// - NewProductEnrichmentRequestedEvent for requesting enrichment
+// - NewProductEnrichedEvent for completed enrichment
+// - NewProductEnrichmentFailedEvent for failed enrichment
+// See MIGRATION_DIMENSION_ENRICHMENT_REMOVAL.md for migration guide
 
 // NewQualityAssessmentRequestedEvent creates a new quality assessment requested event
 func NewQualityAssessmentRequestedEvent(asin, productID string, productData map[string]interface{}) *Event {
@@ -891,6 +820,20 @@ func NormalizeEventType(s string) (string, bool) {
 		return Event_18_ProductStatusChanged, true
 	case "product.availability.changed.v1":
 		return Event_17_ProductAvailabilityChanged, true
+	// Catalog enrichment events mapping
+	case "catalog.product.enrichment.requested.v1":
+		return CatalogProductEnrichmentRequestedV1, true
+	case "catalog.product.enrichment.completed.v1":
+		return CatalogProductEnrichmentCompletedV1, true
+	case "catalog.product.enrichment.failed.v1":
+		return CatalogProductEnrichmentFailedV1, true
+	// Product enrichment events (keep for backward compatibility)
+	case "product.enrichment.requested.v1":
+		return ProductEnrichmentRequestedV1, true
+	case "product.enrichment.completed.v1":
+		return ProductEnrichmentCompletedV1, true
+	case "product.enrichment.failed.v1":
+		return ProductEnrichmentFailedV1, true
 	default:
 		return s, false
 	}
@@ -899,4 +842,27 @@ func NormalizeEventType(s string) (string, bool) {
 // NewProductEnrichmentFailedEvent creates a new PA-API enrichment failure event
 func NewProductEnrichmentFailedEvent(source string, data *ProductEnrichmentFailedData) (*Event, error) {
 	return NewEvent(ProductEnrichmentFailedV1, "product", data.ASIN, data)
+}
+
+// Catalog event constructor aliases for PA-API enrichment
+
+// NewCatalogProductEnrichmentRequestedEvent creates a new catalog PA-API enrichment request event
+// This is the preferred function for new implementations
+func NewCatalogProductEnrichmentRequestedEvent(source string, data *ProductEnrichmentRequestedData) (*Event, error) {
+	if err := data.Validate(); err != nil {
+		return nil, err
+	}
+	return NewEvent(CatalogProductEnrichmentRequestedV1, "catalog.product", data.ASIN, data)
+}
+
+// NewCatalogProductEnrichmentCompletedEvent creates a new catalog PA-API enrichment success event
+// This is the preferred function for new implementations
+func NewCatalogProductEnrichmentCompletedEvent(source string, data *ProductEnrichedData) (*Event, error) {
+	return NewEvent(CatalogProductEnrichmentCompletedV1, "catalog.product", data.ASIN, data)
+}
+
+// NewCatalogProductEnrichmentFailedEvent creates a new catalog PA-API enrichment failure event
+// This is the preferred function for new implementations
+func NewCatalogProductEnrichmentFailedEvent(source string, data *ProductEnrichmentFailedData) (*Event, error) {
+	return NewEvent(CatalogProductEnrichmentFailedV1, "catalog.product", data.ASIN, data)
 }

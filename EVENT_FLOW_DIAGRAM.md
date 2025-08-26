@@ -252,7 +252,7 @@ const (
 // Phase 2: Enrichment
 const (
     Event_03_EnrichmentOrchestrationStarted = "03_ENRICHMENT_ORCHESTRATION_STARTED"
-    Event_04A_DimensionEnrichmentRequested  = "04A_DIMENSION_ENRICHMENT_REQUESTED"
+    // Event_04A_DimensionEnrichmentRequested removed - use PA-API enrichment
     Event_04B_ColorEnrichmentRequested      = "04B_COLOR_ENRICHMENT_REQUESTED"
     Event_04C_BrowseNodeRequested           = "04C_BROWSE_NODE_REQUESTED"
     Event_05A_EnrichmentCompleted           = "05A_ENRICHMENT_COMPLETED"

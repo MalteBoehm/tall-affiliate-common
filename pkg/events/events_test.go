@@ -141,9 +141,7 @@ func TestEventTypes(t *testing.T) {
 		EventTypePriceUpdateFailed,
 
 		// Orchestration Events
-		DimensionEnrichmentRequested,
-		DimensionEnrichmentCompleted,
-		DimensionEnrichmentFailed,
+		// Dimension enrichment events removed - replaced by PA-API enrichment
 		QualityAssessmentRequested,
 		QualityAssessmentCompleted,
 		QualityAssessmentFailed,
