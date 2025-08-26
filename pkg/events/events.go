@@ -20,14 +20,16 @@ const (
 
 	// Phase 2: Enrichment Orchestration (03-05)
 	Event_03_EnrichmentOrchestrationStarted = "03_ENRICHMENT_ORCHESTRATION_STARTED"
-	Event_04A_DimensionEnrichmentRequested  = "04A_DIMENSION_ENRICHMENT_REQUESTED"
-	Event_04B_ColorEnrichmentRequested      = "04B_COLOR_ENRICHMENT_REQUESTED"
-	Event_04C_BrowseNodeRequested           = "04C_BROWSE_NODE_REQUESTED"
-	Event_04D_VariantsEnrichmentRequested   = "04D_VARIANTS_ENRICHMENT_REQUESTED"
-	Event_05A_EnrichmentCompleted           = "05A_ENRICHMENT_COMPLETED"
-	Event_05B_EnrichmentFailed              = "05B_ENRICHMENT_FAILED"
-	Event_05C_VariantsEnriched              = "05C_VARIANTS_ENRICHED"
-	Event_05D_EnrichmentRetry               = "05D_ENRICHMENT_RETRY"
+	// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 instead. Flow replaced by batch-enricher + PA-API.
+	Event_04A_DimensionEnrichmentRequested = "04A_DIMENSION_ENRICHMENT_REQUESTED"
+	Event_04B_ColorEnrichmentRequested     = "04B_COLOR_ENRICHMENT_REQUESTED"
+	// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 instead. Flow replaced by batch-enricher + PA-API.
+	Event_04C_BrowseNodeRequested         = "04C_BROWSE_NODE_REQUESTED"
+	Event_04D_VariantsEnrichmentRequested = "04D_VARIANTS_ENRICHMENT_REQUESTED"
+	Event_05A_EnrichmentCompleted         = "05A_ENRICHMENT_COMPLETED"
+	Event_05B_EnrichmentFailed            = "05B_ENRICHMENT_FAILED"
+	Event_05C_VariantsEnriched            = "05C_VARIANTS_ENRICHED"
+	Event_05D_EnrichmentRetry             = "05D_ENRICHMENT_RETRY"
 
 	// Phase 3: Quality Assessment (06-07)
 	Event_06_QualityAssessmentRequested  = "06_QUALITY_ASSESSMENT_REQUESTED"
@@ -85,8 +87,11 @@ const (
 	EventTypeReviewsFetchFailed         = Event_11B_ReviewsFetchFailed
 	EventTypeReviewsStored              = Event_12A_ReviewsStored
 	EventTypeReviewsError               = Event_12B_ReviewsError
-	EventTypeBrowseNodeRequested        = Event_04C_BrowseNodeRequested
-	EventTypeBrowseNodeResolved         = "05A_BROWSE_NODE_RESOLVED"
+	// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 instead
+	EventTypeBrowseNodeRequested = Event_04C_BrowseNodeRequested
+	// DEPRECATED: Use CatalogProductEnrichmentCompletedV1 instead
+	EventTypeBrowseNodeResolved = "05A_BROWSE_NODE_RESOLVED"
+	// DEPRECATED: Use CatalogProductEnrichmentFailedV1 instead
 	EventTypeBrowseNodeFailed           = "05B_BROWSE_NODE_FAILED"
 	EventTypeCheckPrice                 = "CHECK_PRICE"
 	EventTypePriceUpdated               = Event_15A_PriceUpdated
@@ -97,26 +102,29 @@ const (
 	EventTypeProductDeleted             = Event_19_ProductDeleted
 
 	// Deprecated - to be removed
-	EventTypeProductUnavailable        = "PRODUCT_UNAVAILABLE"
-	EventTypeProductCreated            = "PRODUCT_CREATED"
-	EventTypeProductUpdateRequested    = "PRODUCT_UPDATE_REQUESTED"
-	EventTypeContentUpdateRequested    = "CONTENT_UPDATE_REQUESTED"
-	EventTypeContentUpdated            = "CONTENT_UPDATED"
-	EventTypeContentAnalysisFailed     = "CONTENT_ANALYSIS_FAILED"
-	EventTypeReviewsCollected          = "REVIEWS_COLLECTED"
-	EventTypeReviewsEnriched           = "REVIEWS_ENRICHED"
-	EventTypeReviewsCached             = "REVIEWS_CACHED"
-	EventTypeReviewsExpired            = "REVIEWS_EXPIRED"
-	EventTypeReviewsDeleted            = "REVIEWS_DELETED"
+	EventTypeProductUnavailable     = "PRODUCT_UNAVAILABLE"
+	EventTypeProductCreated         = "PRODUCT_CREATED"
+	EventTypeProductUpdateRequested = "PRODUCT_UPDATE_REQUESTED"
+	EventTypeContentUpdateRequested = "CONTENT_UPDATE_REQUESTED"
+	EventTypeContentUpdated         = "CONTENT_UPDATED"
+	EventTypeContentAnalysisFailed  = "CONTENT_ANALYSIS_FAILED"
+	EventTypeReviewsCollected       = "REVIEWS_COLLECTED"
+	EventTypeReviewsEnriched        = "REVIEWS_ENRICHED"
+	EventTypeReviewsCached          = "REVIEWS_CACHED"
+	EventTypeReviewsExpired         = "REVIEWS_EXPIRED"
+	EventTypeReviewsDeleted         = "REVIEWS_DELETED"
+	// DEPRECATED: Browse node detection is now handled internally by services
 	EventTypeBrowseNodeDetectionFailed = "BROWSE_NODE_DETECTION_FAILED"
 )
 
 // Legacy orchestration event names (mapped to new convention)
 const (
-	// Dimension Enrichment
+	// Dimension Enrichment - DEPRECATED: Use CatalogProductEnrichmentRequestedV1 instead
 	DimensionEnrichmentRequested = Event_04A_DimensionEnrichmentRequested
+	// DEPRECATED: Use CatalogProductEnrichmentCompletedV1 instead
 	DimensionEnrichmentCompleted = "05A_DIMENSION_ENRICHMENT_COMPLETED"
-	DimensionEnrichmentFailed    = "05B_DIMENSION_ENRICHMENT_FAILED"
+	// DEPRECATED: Use CatalogProductEnrichmentFailedV1 instead
+	DimensionEnrichmentFailed = "05B_DIMENSION_ENRICHMENT_FAILED"
 
 	// Quality Assessment
 	QualityAssessmentRequested = Event_06_QualityAssessmentRequested
@@ -142,12 +150,64 @@ const (
 	VariantsEnrichmentFailed    = "05B_VARIANTS_ENRICHMENT_FAILED"
 
 	// PA-API Enrichment Event Types (CloudEvent format)
+	// DEPRECATED: Use catalog.* variants instead for consistency
 	ProductEnrichmentRequestedV1  = "product.enrichment.requested.v1"
 	ProductEnrichmentCompletedV1  = "product.enrichment.completed.v1"
 	ProductEnrichmentFailedV1     = "product.enrichment.failed.v1"
 	VariantsEnrichmentRequestedV1 = "product.variants.enrichment.requested.v1"
 	VariantsEnrichmentCompletedV1 = "product.variants.enrichment.completed.v1"
 	VariantsEnrichmentFailedV1    = "product.variants.enrichment.failed.v1"
+)
+
+// Canonical CloudEvents types (domain.subdomain.action.v1 format)
+// Use these for new implementations; they follow CloudEvents naming conventions
+const (
+	// Product Discovery Events
+	CatalogProductDetectedV1       = "catalog.product.detected.v1"
+	CatalogProductValidatedV1      = "catalog.product.validated.v1"
+	CatalogProductIgnoredV1        = "catalog.product.ignored.v1"
+	CatalogProductReviewRequiredV1 = "catalog.product.review_required.v1"
+
+	// Content Generation Events
+	ContentGenerationRequestedV1 = "content.generation.requested.v1"
+	ContentGenerationStartedV1   = "content.generation.started.v1"
+	ContentGeneratedV1           = "content.generated.v1"
+	ContentGenerationFailedV1    = "content.generation.failed.v1"
+	ContentGenerationRetriedV1   = "content.generation.retried.v1"
+
+	// Reviews Events
+	ReviewsRequestedV1   = "reviews.requested.v1"
+	ReviewsFetchedV1     = "reviews.fetched.v1"
+	ReviewsProcessedV1   = "reviews.processed.v1"
+	ReviewsValidatedV1   = "reviews.validated.v1"
+	ReviewsFetchFailedV1 = "reviews.fetch_failed.v1"
+	ReviewsStoredV1      = "reviews.stored.v1"
+	ReviewsErrorV1       = "reviews.error.v1"
+
+	// Product Enrichment Events (replaces 04A/04C flows)
+	CatalogProductEnrichmentRequestedV1 = "catalog.product.enrichment.requested.v1"
+	CatalogProductEnrichmentCompletedV1 = "catalog.product.enrichment.completed.v1"
+	CatalogProductEnrichmentFailedV1    = "catalog.product.enrichment.failed.v1"
+
+	// Quality Assessment Events
+	QualityAssessmentRequestedV1 = "quality.assessment.requested.v1"
+	QualityAssessmentCompletedV1 = "quality.assessment.completed.v1"
+	QualityAssessmentFailedV1    = "quality.assessment.failed.v1"
+
+	// Product Lifecycle Events
+	ProductReadyForPublicationV1 = "product.ready_for_publication.v1"
+	ProductUpdatedV1             = "product.updated.v1"
+	ProductUpdateFailedV1        = "product.update_failed.v1"
+	ProductAvailabilityChangedV1 = "product.availability.changed.v1"
+	ProductStatusChangedV1       = "product.status.changed.v1"
+	ProductDeletedV1             = "product.deleted.v1"
+
+	// Price Monitoring Events
+	PriceUpdatedV1               = "price.updated.v1"
+	PriceUpdateFailedV1          = "price.update_failed.v1"
+	PriceMonitoringScheduledV1   = "price.monitoring.scheduled.v1"
+	AvailabilityCheckScheduledV1 = "product.availability_check.scheduled.v1"
+	PeriodicUpdateScheduledV1    = "product.periodic_update.scheduled.v1"
 )
 
 // Event represents a domain event
@@ -196,6 +256,7 @@ type ContentGenerationRequestedPayload struct {
 }
 
 // BrowseNodeRequestedPayload represents the payload for a BROWSE_NODE_REQUESTED event
+// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 with ProductEnrichmentRequestedData instead
 type BrowseNodeRequestedPayload struct {
 	ASIN        string    `json:"asin"`
 	ProductID   string    `json:"product_id"`
@@ -203,6 +264,7 @@ type BrowseNodeRequestedPayload struct {
 }
 
 // BrowseNodeResolvedPayload represents the payload for a BROWSE_NODE_RESOLVED event
+// DEPRECATED: Use CatalogProductEnrichmentCompletedV1 with ProductEnrichedData instead
 type BrowseNodeResolvedPayload struct {
 	ASIN         string    `json:"asin"`
 	ProductID    string    `json:"product_id"`
@@ -211,6 +273,7 @@ type BrowseNodeResolvedPayload struct {
 }
 
 // BrowseNodeFailedPayload represents the payload for a BROWSE_NODE_FAILED event
+// DEPRECATED: Use CatalogProductEnrichmentFailedV1 with ProductEnrichmentFailedData instead
 type BrowseNodeFailedPayload struct {
 	ASIN      string    `json:"asin"`
 	ProductID string    `json:"product_id"`
@@ -315,6 +378,7 @@ type ProductReviewRequiredPayload struct {
 }
 
 // DimensionEnrichmentRequestedPayload represents the payload for dimension enrichment request
+// DEPRECATED: Use CatalogProductEnrichmentRequestedV1 with ProductEnrichmentRequestedData instead
 type DimensionEnrichmentRequestedPayload struct {
 	ASIN          string    `json:"asin"`
 	ProductID     string    `json:"product_id"`
@@ -323,6 +387,7 @@ type DimensionEnrichmentRequestedPayload struct {
 }
 
 // DimensionEnrichmentCompletedPayload represents the payload for successful dimension enrichment
+// DEPRECATED: Use CatalogProductEnrichmentCompletedV1 with ProductEnrichedData instead
 type DimensionEnrichmentCompletedPayload struct {
 	ASIN        string    `json:"asin"`
 	ProductID   string    `json:"product_id"`
@@ -334,6 +399,7 @@ type DimensionEnrichmentCompletedPayload struct {
 }
 
 // DimensionEnrichmentFailedPayload represents the payload for failed dimension enrichment
+// DEPRECATED: Use CatalogProductEnrichmentFailedV1 with ProductEnrichmentFailedData instead
 type DimensionEnrichmentFailedPayload struct {
 	ASIN      string    `json:"asin"`
 	ProductID string    `json:"product_id"`
@@ -629,6 +695,7 @@ func GetReviewsEventPriority(eventType string) int {
 // Helper functions for orchestration events
 
 // NewDimensionEnrichmentRequestedEvent creates a new dimension enrichment requested event
+// DEPRECATED: Use NewProductEnrichmentRequestedEvent with CatalogProductEnrichmentRequestedV1 instead
 func NewDimensionEnrichmentRequestedEvent(asin, productID, detailPageURL string) *Event {
 	payload := DimensionEnrichmentRequestedPayload{
 		ASIN:          asin,
@@ -642,6 +709,7 @@ func NewDimensionEnrichmentRequestedEvent(asin, productID, detailPageURL string)
 }
 
 // NewDimensionEnrichmentCompletedEvent creates a new dimension enrichment completed event
+// DEPRECATED: Use NewProductEnrichedEvent with CatalogProductEnrichmentCompletedV1 instead
 func NewDimensionEnrichmentCompletedEvent(asin, productID string, heightCm, lengthCm, widthCm *float64) *Event {
 	payload := DimensionEnrichmentCompletedPayload{
 		ASIN:        asin,
@@ -658,6 +726,7 @@ func NewDimensionEnrichmentCompletedEvent(asin, productID string, heightCm, leng
 }
 
 // NewDimensionEnrichmentFailedEvent creates a new dimension enrichment failed event
+// DEPRECATED: Use NewProductEnrichmentFailedEvent with CatalogProductEnrichmentFailedV1 instead
 func NewDimensionEnrichmentFailedEvent(asin, productID, reason string) *Event {
 	payload := DimensionEnrichmentFailedPayload{
 		ASIN:      asin,
@@ -845,6 +914,13 @@ func NormalizeEventType(s string) (string, bool) {
 		return Event_07A_QualityAssessmentCompleted, true
 	case "QUALITY_ASSESSMENT_FAILED":
 		return Event_07B_QualityAssessmentFailed, true
+	// Product lifecycle events - CloudEvents format mapping
+	case "product.deleted.v1":
+		return Event_19_ProductDeleted, true
+	case "product.status.changed.v1":
+		return Event_18_ProductStatusChanged, true
+	case "product.availability.changed.v1":
+		return Event_17_ProductAvailabilityChanged, true
 	default:
 		return s, false
 	}
