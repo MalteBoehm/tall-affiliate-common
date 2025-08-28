@@ -105,10 +105,20 @@ func (c *StreamConsumer) processMessage(
 	msg redis.XMessage,
 	handler func(context.Context, *events.Event, string) error,
 ) error {
-	// Extract event data from message
-	eventData, ok := msg.Values["event"].(string)
+	// Extract event data from message - support both "event" and "data" fields
+	var eventData string
+	var ok bool
+	
+	// First try "event" field (standard format)
+	eventData, ok = msg.Values["event"].(string)
 	if !ok {
-		return fmt.Errorf("message does not contain event data")
+		// Fallback to "data" field (legacy format)
+		eventData, ok = msg.Values["data"].(string)
+		if !ok {
+			return fmt.Errorf("message does not contain event data in 'event' or 'data' field")
+		}
+		c.logger.Warn("Using legacy 'data' field format - consider migrating to 'event' field",
+			"messageID", msg.ID)
 	}
 
 	// Parse the event
