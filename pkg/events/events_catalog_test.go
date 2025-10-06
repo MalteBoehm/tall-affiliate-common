@@ -158,6 +158,16 @@ func TestNormalizeEventTypeCatalogEvents(t *testing.T) {
 		found    bool
 	}{
 		{
+			input:    "SCRAPER_JOB_REQUESTED",
+			expected: Event_00A_ScraperJobRequested,
+			found:    true,
+		},
+		{
+			input:    Event_00A_ScraperJobRequested,
+			expected: Event_00A_ScraperJobRequested,
+			found:    true,
+		},
+		{
 			input:    "catalog.product.enrichment.requested.v1",
 			expected: CatalogProductEnrichmentRequestedV1,
 			found:    true,
@@ -201,4 +211,208 @@ func TestNormalizeEventTypeCatalogEvents(t *testing.T) {
 			assert.Equal(t, tt.found, found)
 		})
 	}
+}
+
+func TestNewScraperJobRequestedEvent(t *testing.T) {
+	jobID := "job-123"
+	searchQuery := "tall jeans"
+	category := "fashion"
+	maxPages := 5
+
+	event := NewScraperJobRequestedEvent(jobID, searchQuery, category, maxPages)
+	require.NotNil(t, event)
+	assert.Equal(t, EventTypeScraperJobRequested, event.Type)
+	assert.Equal(t, "scraper.job", event.AggregateType)
+	assert.Equal(t, jobID, event.AggregateID)
+
+	var payload ScraperJobRequestedPayload
+	require.NoError(t, event.UnmarshalPayload(&payload))
+	assert.Equal(t, jobID, payload.JobID)
+	assert.Equal(t, searchQuery, payload.SearchQuery)
+	assert.Equal(t, category, payload.Category)
+	assert.Equal(t, maxPages, payload.MaxPages)
+	assert.WithinDuration(t, time.Now().UTC(), payload.RequestedAt, 2*time.Second)
+}
+
+func TestNormalizeEventTypeContentGeneration(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+		found    bool
+	}{
+		{
+			input:    "CONTENT_GENERATION_REQUESTED",
+			expected: Event_08A_ContentGenerationRequested,
+			found:    true,
+		},
+		{
+			input:    "CONTENT_GENERATION_STARTED",
+			expected: Event_09A_ContentGenerationStarted,
+			found:    true,
+		},
+		{
+			input:    "CONTENT_GENERATED",
+			expected: Event_10A_ContentGenerated,
+			found:    true,
+		},
+		{
+			input:    "CONTENT_GENERATION_FAILED",
+			expected: Event_10B_ContentGenerationFailed,
+			found:    true,
+		},
+		{
+			input:    "CONTENT_GENERATION_RETRIED",
+			expected: Event_10D_ContentGenerationRetried,
+			found:    true,
+		},
+		{
+			input:    "REVIEWS_REQUESTED",
+			expected: Event_08B_ReviewsRequested,
+			found:    true,
+		},
+		{
+			input:    "REVIEWS_FETCHED",
+			expected: Event_09B_ReviewsFetched,
+			found:    true,
+		},
+		{
+			input:    "REVIEWS_PROCESSED",
+			expected: Event_10C_ReviewsProcessed,
+			found:    true,
+		},
+		{
+			input:    "REVIEWS_VALIDATED",
+			expected: Event_11A_ReviewsValidated,
+			found:    true,
+		},
+		{
+			input:    "REVIEWS_FETCH_FAILED",
+			expected: Event_11B_ReviewsFetchFailed,
+			found:    true,
+		},
+		{
+			input:    "REVIEWS_STORED",
+			expected: Event_12A_ReviewsStored,
+			found:    true,
+		},
+		{
+			input:    "REVIEWS_ERROR",
+			expected: Event_12B_ReviewsError,
+			found:    true,
+		},
+		{
+			input:    "content.generation.requested.v1",
+			expected: ContentGenerationRequestedV1,
+			found:    true,
+		},
+		{
+			input:    "content.generation.started.v1",
+			expected: ContentGenerationStartedV1,
+			found:    true,
+		},
+		{
+			input:    "content.generated.v1",
+			expected: ContentGeneratedV1,
+			found:    true,
+		},
+		{
+			input:    "content.generation.failed.v1",
+			expected: ContentGenerationFailedV1,
+			found:    true,
+		},
+		{
+			input:    "content.generation.retried.v1",
+			expected: ContentGenerationRetriedV1,
+			found:    true,
+		},
+		{
+			input:    "reviews.requested.v1",
+			expected: ReviewsRequestedV1,
+			found:    true,
+		},
+		{
+			input:    "reviews.fetched.v1",
+			expected: ReviewsFetchedV1,
+			found:    true,
+		},
+		{
+			input:    "reviews.processed.v1",
+			expected: ReviewsProcessedV1,
+			found:    true,
+		},
+		{
+			input:    "reviews.validated.v1",
+			expected: ReviewsValidatedV1,
+			found:    true,
+		},
+		{
+			input:    "reviews.fetch_failed.v1",
+			expected: ReviewsFetchFailedV1,
+			found:    true,
+		},
+		{
+			input:    "reviews.stored.v1",
+			expected: ReviewsStoredV1,
+			found:    true,
+		},
+		{
+			input:    "reviews.error.v1",
+			expected: ReviewsErrorV1,
+			found:    true,
+		},
+		{
+			input:    "UNKNOWN_CONTENT_EVENT",
+			expected: "UNKNOWN_CONTENT_EVENT",
+			found:    false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			result, found := NormalizeEventType(tt.input)
+			assert.Equal(t, tt.expected, result)
+			assert.Equal(t, tt.found, found)
+		})
+	}
+}
+
+func TestContentGenerationEventCreationAndNormalization(t *testing.T) {
+	// Test creating events with legacy types and normalizing them
+	now := time.Now().UTC()
+
+	// Legacy content generation requested
+	legacyType := "CONTENT_GENERATION_REQUESTED"
+	payload := ContentGenerationRequestedPayload{
+		ASIN:        "B07PXGQC1Q",
+		ProductID:   "product-123",
+		Priority:    4,
+		RequestedAt: now,
+	}
+
+	event, err := NewEvent(legacyType, "content", "product-123", payload)
+	require.NoError(t, err)
+
+	// Normalize the event type
+	normalizedType, found := NormalizeEventType(event.Type)
+	require.True(t, found)
+	assert.Equal(t, Event_08A_ContentGenerationRequested, normalizedType)
+
+	// Update event with normalized type
+	event.Type = normalizedType
+
+	// Verify payload roundtrip after normalization
+	var unmarshaledPayload ContentGenerationRequestedPayload
+	err = event.UnmarshalPayload(&unmarshaledPayload)
+	require.NoError(t, err)
+
+	assert.Equal(t, payload.ASIN, unmarshaledPayload.ASIN)
+	assert.Equal(t, payload.ProductID, unmarshaledPayload.ProductID)
+	assert.Equal(t, payload.Priority, unmarshaledPayload.Priority)
+	assert.WithinDuration(t, payload.RequestedAt, unmarshaledPayload.RequestedAt, time.Second)
+
+	// Test CloudEvents format normalization
+	cloudEventType := "content.generation.requested.v1"
+	normalizedCloudType, foundCloud := NormalizeEventType(cloudEventType)
+	require.True(t, foundCloud)
+	assert.Equal(t, ContentGenerationRequestedV1, normalizedCloudType)
 }

@@ -12,6 +12,9 @@ import (
 // Event types with numbered convention (Phase_Option_Name)
 // Numbers indicate sequence, Letters indicate path (A=Success, B=Failure, C=Manual, D=Retry)
 const (
+	// Phase 0: Scraper Intake (00)
+	Event_00A_ScraperJobRequested = "00A_SCRAPER_JOB_REQUESTED"
+
 	// Phase 1: Product Discovery (01-02)
 	Event_01_ProductDetected        = "01_PRODUCT_DETECTED"
 	Event_02A_ProductValidated      = "02A_PRODUCT_VALIDATED"
@@ -21,47 +24,47 @@ const (
 	// Phase 2: Enrichment Orchestration (03-05)
 	Event_03_EnrichmentOrchestrationStarted = "03_ENRICHMENT_ORCHESTRATION_STARTED"
 	// DEPRECATED: Event_04A_DimensionEnrichmentRequested removed - use CatalogProductEnrichmentRequestedV1 instead
-	Event_04B_ColorEnrichmentRequested     = "04B_COLOR_ENRICHMENT_REQUESTED"
+	Event_04B_ColorEnrichmentRequested = "04B_COLOR_ENRICHMENT_REQUESTED"
 	// DEPRECATED: Event_04C_BrowseNodeRequested removed - use CatalogProductEnrichmentRequestedV1 instead
 	Event_04D_VariantsEnrichmentRequested = "04D_VARIANTS_ENRICHMENT_REQUESTED"
-	Event_05A_EnrichmentCompleted         = EnrichmentCompletedV1         // Migrated to CloudEvents
-	Event_05B_EnrichmentFailed            = EnrichmentFailedV1            // Migrated to CloudEvents
-	Event_05C_VariantsEnriched            = VariantsEnrichedV1            // Migrated to CloudEvents
-	Event_05D_EnrichmentRetry             = EnrichmentRetryV1             // Migrated to CloudEvents
+	Event_05A_EnrichmentCompleted         = EnrichmentCompletedV1 // Migrated to CloudEvents
+	Event_05B_EnrichmentFailed            = EnrichmentFailedV1    // Migrated to CloudEvents
+	Event_05C_VariantsEnriched            = VariantsEnrichedV1    // Migrated to CloudEvents
+	Event_05D_EnrichmentRetry             = EnrichmentRetryV1     // Migrated to CloudEvents
 
 	// Phase 3: Quality Assessment (06-07)
-	Event_06_QualityAssessmentRequested  = QualityAssessmentRequestedV1  // Migrated to CloudEvents
+	Event_06_QualityAssessmentRequested  = QualityAssessmentRequestedV1 // Migrated to CloudEvents
 	Event_07A_QualityAssessmentCompleted = QualityAssessmentCompletedV1 // Migrated to CloudEvents
 	Event_07B_QualityAssessmentFailed    = QualityAssessmentFailedV1    // Migrated to CloudEvents
 
 	// Phase 4: Content & Reviews Generation (08-12)
 	Event_08A_ContentGenerationRequested = "08A_CONTENT_GENERATION_REQUESTED"
-	Event_08B_ReviewsRequested           = ReviewsRequestedV1           // Migrated to CloudEvents
+	Event_08B_ReviewsRequested           = ReviewsRequestedV1 // Migrated to CloudEvents
 	Event_09A_ContentGenerationStarted   = "09A_CONTENT_GENERATION_STARTED"
-	Event_09B_ReviewsFetched             = ReviewsFetchedV1             // Migrated to CloudEvents
+	Event_09B_ReviewsFetched             = ReviewsFetchedV1 // Migrated to CloudEvents
 	Event_10A_ContentGenerated           = "10A_CONTENT_GENERATED"
 	Event_10B_ContentGenerationFailed    = "10B_CONTENT_GENERATION_FAILED"
-	Event_10C_ReviewsProcessed           = ReviewsProcessedV1           // Migrated to CloudEvents
-	Event_10D_ContentGenerationRetried   = ContentGenerationRetriedV1   // Migrated to CloudEvents
-	Event_11A_ReviewsValidated           = ReviewsValidatedV1           // Migrated to CloudEvents
-	Event_11B_ReviewsFetchFailed         = ReviewsFetchFailedV1         // Migrated to CloudEvents
-	Event_12A_ReviewsStored              = ReviewsStoredV1              // Migrated to CloudEvents
-	Event_12B_ReviewsError               = ReviewsErrorV1               // Migrated to CloudEvents
+	Event_10C_ReviewsProcessed           = ReviewsProcessedV1         // Migrated to CloudEvents
+	Event_10D_ContentGenerationRetried   = ContentGenerationRetriedV1 // Migrated to CloudEvents
+	Event_11A_ReviewsValidated           = ReviewsValidatedV1         // Migrated to CloudEvents
+	Event_11B_ReviewsFetchFailed         = ReviewsFetchFailedV1       // Migrated to CloudEvents
+	Event_12A_ReviewsStored              = ReviewsStoredV1            // Migrated to CloudEvents
+	Event_12B_ReviewsError               = ReviewsErrorV1             // Migrated to CloudEvents
 
 	// Phase 5: Publication & Monitoring (13-14)
-	Event_13_ProductReadyForPublication  = ProductReadyForPublicationV1  // Migrated to CloudEvents
+	Event_13_ProductReadyForPublication  = ProductReadyForPublicationV1 // Migrated to CloudEvents
 	Event_14A_PriceMonitoringScheduled   = PriceMonitoringScheduledV1   // Migrated to CloudEvents
 	Event_14B_AvailabilityCheckScheduled = AvailabilityCheckScheduledV1 // Migrated to CloudEvents
 	Event_14C_PeriodicUpdateScheduled    = PeriodicUpdateScheduledV1    // Migrated to CloudEvents
 
 	// Additional Events (15+)
-	Event_15A_PriceUpdated              = PriceUpdatedV1              // Migrated to CloudEvents
-	Event_15B_PriceUpdateFailed         = PriceUpdateFailedV1         // Migrated to CloudEvents
-	Event_16A_ProductUpdated            = ProductUpdatedV1            // Migrated to CloudEvents
-	Event_16B_ProductUpdateFailed       = ProductUpdateFailedV1       // Migrated to CloudEvents
+	Event_15A_PriceUpdated              = PriceUpdatedV1        // Migrated to CloudEvents
+	Event_15B_PriceUpdateFailed         = PriceUpdateFailedV1   // Migrated to CloudEvents
+	Event_16A_ProductUpdated            = ProductUpdatedV1      // Migrated to CloudEvents
+	Event_16B_ProductUpdateFailed       = ProductUpdateFailedV1 // Migrated to CloudEvents
 	Event_17_ProductAvailabilityChanged = "17_PRODUCT_AVAILABILITY_CHANGED"
-	Event_18_ProductStatusChanged       = ProductStatusChangedV1      // Migrated to CloudEvents
-	Event_19_ProductDeleted             = ProductDeletedV1            // Migrated to CloudEvents
+	Event_18_ProductStatusChanged       = ProductStatusChangedV1 // Migrated to CloudEvents
+	Event_19_ProductDeleted             = ProductDeletedV1       // Migrated to CloudEvents
 
 	// Legacy event names (deprecated - for backward compatibility)
 	// DEPRECATED: Use numbered constants instead of plain strings:
@@ -69,6 +72,7 @@ const (
 	// - "PRODUCT_IGNORED" → use Event_02B_ProductIgnored
 	// - "CONTENT_GENERATION_REQUESTED" → use Event_08A_ContentGenerationRequested
 	// - "04D_VARIANTS_ENRICHMENT_REQUESTED" → use VariationEnrichmentRequested (04B_VARIATION_ENRICHMENT_REQUESTED)
+	EventTypeScraperJobRequested        = Event_00A_ScraperJobRequested
 	EventTypeNewProductDetected         = Event_01_ProductDetected
 	EventTypeProductValidated           = Event_02A_ProductValidated
 	EventTypeProductIgnored             = Event_02B_ProductIgnored
@@ -175,7 +179,7 @@ const (
 	CatalogProductEnrichmentRequestedV1 = "catalog.product.enrichment.requested.v1"
 	CatalogProductEnrichmentCompletedV1 = "catalog.product.enrichment.completed.v1"
 	CatalogProductEnrichmentFailedV1    = "catalog.product.enrichment.failed.v1"
-	
+
 	// Enrichment Events (Legacy 05 series)
 	EnrichmentCompletedV1 = "enrichment.completed.v1"
 	EnrichmentFailedV1    = "enrichment.failed.v1"
@@ -212,6 +216,15 @@ type Event struct {
 	Payload       any            `json:"payload"`
 	Timestamp     time.Time      `json:"timestamp"`
 	Metadata      map[string]any `json:"metadata,omitempty"`
+}
+
+// ScraperJobRequestedPayload represents the payload for an intake scraper job
+type ScraperJobRequestedPayload struct {
+	JobID       string    `json:"job_id"`
+	SearchQuery string    `json:"search_query"`
+	Category    string    `json:"category"`
+	MaxPages    int       `json:"max_pages"`
+	RequestedAt time.Time `json:"requested_at"`
 }
 
 // ProductCreatedPayload represents the payload for a PRODUCT_CREATED event
@@ -522,6 +535,20 @@ func NewEvent(eventType, aggregateType, aggregateID string, payload any) (*Event
 	}, nil
 }
 
+// NewScraperJobRequestedEvent creates a canonical scraper job requested event
+func NewScraperJobRequestedEvent(jobID, searchQuery, category string, maxPages int) *Event {
+	payload := ScraperJobRequestedPayload{
+		JobID:       jobID,
+		SearchQuery: searchQuery,
+		Category:    category,
+		MaxPages:    maxPages,
+		RequestedAt: time.Now().UTC(),
+	}
+
+	event, _ := NewEvent(EventTypeScraperJobRequested, "scraper.job", jobID, payload)
+	return event
+}
+
 // UnmarshalPayload unmarshals the event payload into the given value
 func (e *Event) UnmarshalPayload(v any) error {
 	payloadBytes, err := json.Marshal(e.Payload)
@@ -793,16 +820,22 @@ func NewProductEnrichedEvent(source string, data *ProductEnrichedData) (*Event, 
 }
 
 // NormalizeEventType maps legacy/ad-hoc event strings to canonical numbered constants.
-// Returns (canonical_event, true) if mapping exists, otherwise (original_string, false).
-// This helper allows services to centrally handle legacy event names during migration.
 func NormalizeEventType(s string) (string, bool) {
 	switch s {
 	case "CONTENT_GENERATION_REQUESTED":
 		return Event_08A_ContentGenerationRequested, true
+	case "CONTENT_GENERATION_STARTED":
+		return Event_09A_ContentGenerationStarted, true
 	case "CONTENT_GENERATED":
 		return Event_10A_ContentGenerated, true
 	case "CONTENT_GENERATION_FAILED":
 		return Event_10B_ContentGenerationFailed, true
+	case "CONTENT_GENERATION_RETRIED":
+		return Event_10D_ContentGenerationRetried, true
+	case "SCRAPER_JOB_REQUESTED":
+		return Event_00A_ScraperJobRequested, true
+	case Event_00A_ScraperJobRequested:
+		return Event_00A_ScraperJobRequested, true
 	case "PRODUCT_VALIDATED":
 		return Event_02A_ProductValidated, true
 	case "PRODUCT_IGNORED":
