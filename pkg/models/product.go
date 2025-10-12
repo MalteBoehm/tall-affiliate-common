@@ -87,38 +87,71 @@ type VariationAttribute struct {
 // ProductStatus represents a product status value
 type ProductStatus string
 
-// ProductStatus constants
+// ProductStatus constants (CAPS naming convention)
 const (
 	// Existing status values
-	ProductStatusPending     ProductStatus = "pending"     // Produkt wartet auf Freigabe/Verarbeitung
-	ProductStatusActive      ProductStatus = "active"      // Produkt ist aktiv und sichtbar
-	ProductStatusUnavailable ProductStatus = "unavailable" // Legacy status - deprecated
-	ProductStatusTerminated  ProductStatus = "terminated"  // Legacy status - deprecated
+	PRODUCT_STATUS_PENDING     ProductStatus = "pending"     // Produkt wartet auf Freigabe/Verarbeitung
+	PRODUCT_STATUS_ACTIVE      ProductStatus = "active"      // Produkt ist aktiv und sichtbar
+	PRODUCT_STATUS_UNAVAILABLE ProductStatus = "unavailable" // Legacy status - deprecated
+	PRODUCT_STATUS_TERMINATED  ProductStatus = "terminated"  // Legacy status - deprecated
 
 	// New status values based on database requirements
-	ProductStatusUnsupportedCategory ProductStatus = "unsupported_category" // Category ist nicht von unserer Seite unterstützt. Wird blockiert
-	ProductStatusPromoted            ProductStatus = "promoted"             // Produkt wird aktiv bevorzugt
-	ProductStatusInactive            ProductStatus = "inactive"             // Produkt ist deaktiviert
-	ProductStatusDraft               ProductStatus = "draft"                // Produkt ist im Entwurfsmodus
-	ProductStatusDeleted             ProductStatus = "deleted"              // Produkt ist gelöscht (soft delete)
-	ProductStatusOutOfStock          ProductStatus = "out_of_stock"         // Produkt ist nicht verfügbar
-	ProductStatusDiscontinued        ProductStatus = "discontinued"         // Produkt wird nicht mehr geführt
+	PRODUCT_STATUS_UNSUPPORTED_CATEGORY ProductStatus = "unsupported_category" // Category ist nicht von unserer Seite unterstützt. Wird blockiert
+	PRODUCT_STATUS_PROMOTED             ProductStatus = "promoted"             // Produkt wird aktiv bevorzugt
+	PRODUCT_STATUS_INACTIVE             ProductStatus = "inactive"             // Produkt ist deaktiviert
+	PRODUCT_STATUS_DRAFT                ProductStatus = "draft"                // Produkt ist im Entwurfsmodus
+	PRODUCT_STATUS_DELETED              ProductStatus = "deleted"              // Produkt ist gelöscht (soft delete)
+	PRODUCT_STATUS_OUT_OF_STOCK         ProductStatus = "out_of_stock"         // Produkt ist nicht verfügbar
+	PRODUCT_STATUS_DISCONTINUED         ProductStatus = "discontinued"         // Produkt wird nicht mehr geführt
+)
+
+// Legacy ProductStatus constants for backward compatibility
+// DEPRECATED: Use CAPS constants instead. Will be removed in a future release.
+const (
+	ProductStatusPending             = PRODUCT_STATUS_PENDING
+	ProductStatusActive              = PRODUCT_STATUS_ACTIVE
+	ProductStatusUnavailable         = PRODUCT_STATUS_UNAVAILABLE
+	ProductStatusTerminated          = PRODUCT_STATUS_TERMINATED
+	ProductStatusUnsupportedCategory = PRODUCT_STATUS_UNSUPPORTED_CATEGORY
+	ProductStatusPromoted            = PRODUCT_STATUS_PROMOTED
+	ProductStatusInactive            = PRODUCT_STATUS_INACTIVE
+	ProductStatusDraft               = PRODUCT_STATUS_DRAFT
+	ProductStatusDeleted             = PRODUCT_STATUS_DELETED
+	ProductStatusOutOfStock          = PRODUCT_STATUS_OUT_OF_STOCK
+	ProductStatusDiscontinued        = PRODUCT_STATUS_DISCONTINUED
 )
 
 // ContentStatus represents a content generation status value
 type ContentStatus string
 
-// ContentStatus constants
+// ContentStatus constants (CAPS naming convention)
 const (
-	ContentStatusPending   ContentStatus = "pending"
-	ContentStatusRequested ContentStatus = "requested"
-	ContentStatusComplete  ContentStatus = "completed" // Changed from "complete" to "completed" for consistency
-	ContentStatusFailed    ContentStatus = "failed"
+	CONTENT_STATUS_PENDING   ContentStatus = "pending"
+	CONTENT_STATUS_REQUESTED ContentStatus = "requested"
+	CONTENT_STATUS_COMPLETE  ContentStatus = "completed" // Changed from "complete" to "completed" for consistency
+	CONTENT_STATUS_FAILED    ContentStatus = "failed"
 )
 
-// Gender constants
+// Legacy ContentStatus constants for backward compatibility
+// DEPRECATED: Use CAPS constants instead. Will be removed in a future release.
 const (
-	GenderMale   = "male"
-	GenderFemale = "female"
-	GenderUnisex = "unisex"
+	ContentStatusPending   = CONTENT_STATUS_PENDING
+	ContentStatusRequested = CONTENT_STATUS_REQUESTED
+	ContentStatusComplete  = CONTENT_STATUS_COMPLETE
+	ContentStatusFailed    = CONTENT_STATUS_FAILED
+)
+
+// Gender constants (CAPS naming convention)
+const (
+	GENDER_MALE   = "male"
+	GENDER_FEMALE = "female"
+	GENDER_UNISEX = "unisex"
+)
+
+// Legacy Gender constants for backward compatibility
+// DEPRECATED: Use CAPS constants instead. Will be removed in a future release.
+const (
+	GenderMale   = GENDER_MALE
+	GenderFemale = GENDER_FEMALE
+	GenderUnisex = GENDER_UNISEX
 )

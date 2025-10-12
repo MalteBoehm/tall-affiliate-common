@@ -1,34 +1,54 @@
 // pkg/constants/constants.go
 package constants
 
-// Stream names (Unterstriche gemäß event.md)
+// Stream names (CAPS naming convention)
 const (
-	StreamContentGeneration = "stream:content_generation"
-	StreamProductLifecycle  = "stream:product_lifecycle"
-	// StreamBrowseNodes removed - use StreamProductLifecycle for enrichment
-	StreamPriceTracking     = "stream:price_tracking"
+	STREAM_CONTENT_GENERATION = "stream:content_generation"
+	STREAM_PRODUCT_LIFECYCLE  = "stream:product_lifecycle"
+	// StreamBrowseNodes removed - use STREAM_PRODUCT_LIFECYCLE for enrichment
+	STREAM_PRICE_TRACKING = "stream:price_tracking"
 )
 
-// Consumer group names (Unterstriche gemäß event.md)
+// Consumer group names (CAPS naming convention)
 const (
-	GroupProductLifecycle  = "group:product_lifecycle"
-	GroupContentGeneration = "group:content_generation"
+	GROUP_PRODUCT_LIFECYCLE  = "group:product_lifecycle"
+	GROUP_CONTENT_GENERATION = "group:content_generation"
 	// GroupBrowseNodes removed
-	GroupPriceTracking     = "group:price_tracking"
+	GROUP_PRICE_TRACKING = "group:price_tracking"
 )
 
-// Worker names (Unterstriche gemäß event.md)
+// Worker names (CAPS naming convention)
 const (
-	WorkerProductLifecycle  = "product_lifecycle_worker"
-	WorkerContentGeneration = "content_generation_worker"
+	WORKER_PRODUCT_LIFECYCLE  = "product_lifecycle_worker"
+	WORKER_CONTENT_GENERATION = "content_generation_worker"
 	// WorkerBrowseNodes removed
-	WorkerPriceTracking     = "price_tracking_worker"
+	WORKER_PRICE_TRACKING = "price_tracking_worker"
 )
 
-// Database table names
+// Database table names (CAPS naming convention)
 const (
-	TableProduct      = "product"
-	TableOutbox       = "outbox"
-	TablePriceHistory = "price_history"
+	TABLE_PRODUCT       = "product"
+	TABLE_OUTBOX        = "outbox"
+	TABLE_PRICE_HISTORY = "price_history"
 	// TableBrowseNode removed
+)
+
+// Legacy constants for backward compatibility
+// DEPRECATED: Use CAPS constants instead. Will be removed in a future release.
+const (
+	StreamContentGeneration = STREAM_CONTENT_GENERATION
+	StreamProductLifecycle  = STREAM_PRODUCT_LIFECYCLE
+	StreamPriceTracking     = STREAM_PRICE_TRACKING
+
+	GroupProductLifecycle  = GROUP_PRODUCT_LIFECYCLE
+	GroupContentGeneration = GROUP_CONTENT_GENERATION
+	GroupPriceTracking     = GROUP_PRICE_TRACKING
+
+	WorkerProductLifecycle  = WORKER_PRODUCT_LIFECYCLE
+	WorkerContentGeneration = WORKER_CONTENT_GENERATION
+	WorkerPriceTracking     = WORKER_PRICE_TRACKING
+
+	TableProduct      = TABLE_PRODUCT
+	TableOutbox       = TABLE_OUTBOX
+	TablePriceHistory = TABLE_PRICE_HISTORY
 )

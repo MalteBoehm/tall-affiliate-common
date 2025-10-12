@@ -84,6 +84,8 @@ func DetermineTargetStream(eventType string) string {
 }
 
 // Helper functions to categorize events
+// DEPRECATED: These functions will be removed in a future release. Use CAPS constants directly.
+
 func isProductLifecycleEvent(eventType string) bool {
 	productEvents := []string{
 		events.EventTypeNewProductDetected,
@@ -95,6 +97,17 @@ func isProductLifecycleEvent(eventType string) bool {
 		events.EventTypeProductAvailabilityChanged,
 		events.EventTypeProductStatusChanged,
 		events.EventTypeProductIgnored,
+		// Also check CAPS constants
+		events.CATALOG_PRODUCT_DETECTED_V1,
+		events.CATALOG_PRODUCT_VALIDATED_V1,
+		events.CATALOG_PRODUCT_IGNORED_V1,
+		events.CATALOG_PRODUCT_REVIEW_REQUIRED_V1,
+		events.PRODUCT_READY_FOR_PUBLICATION_V1,
+		events.PRODUCT_UPDATED_V1,
+		events.PRODUCT_UPDATE_FAILED_V1,
+		events.PRODUCT_AVAILABILITY_CHANGED_V1,
+		events.PRODUCT_STATUS_CHANGED_V1,
+		events.PRODUCT_DELETED_V1,
 	}
 
 	for _, pe := range productEvents {
@@ -115,6 +128,19 @@ func isContentGenerationEvent(eventType string) bool {
 		events.EventTypeReviewsCollected,
 		events.EventTypeReviewsFetchFailed,
 		events.EventTypeReviewsProcessed,
+		// Also check CAPS constants
+		events.CONTENT_GENERATION_REQUESTED_V1,
+		events.CONTENT_GENERATION_STARTED_V1,
+		events.CONTENT_GENERATED_V1,
+		events.CONTENT_GENERATION_FAILED_V1,
+		events.CONTENT_GENERATION_RETRIED_V1,
+		events.REVIEWS_REQUESTED_V1,
+		events.REVIEWS_FETCHED_V1,
+		events.REVIEWS_PROCESSED_V1,
+		events.REVIEWS_VALIDATED_V1,
+		events.REVIEWS_FETCH_FAILED_V1,
+		events.REVIEWS_STORED_V1,
+		events.REVIEWS_ERROR_V1,
 	}
 
 	for _, ce := range contentEvents {
@@ -132,6 +158,10 @@ func isPriceTrackingEvent(eventType string) bool {
 		events.EventTypeCheckPrice,
 		events.EventTypePriceUpdated,
 		events.EventTypePriceUpdateFailed,
+		// Also check CAPS constants
+		events.PRICE_UPDATED_V1,
+		events.PRICE_UPDATE_FAILED_V1,
+		events.PRICE_MONITORING_SCHEDULED_V1,
 	}
 
 	for _, pe := range priceEvents {
